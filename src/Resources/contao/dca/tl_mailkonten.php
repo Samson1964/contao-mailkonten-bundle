@@ -127,7 +127,7 @@ $GLOBALS['TL_DCA']['tl_mailkonten'] = array
 			(
 				'mandatory'           => false,
 				'tl_class'            => 'w50'
-			)
+			),
 			'sql'                     => "int(10) unsigned NOT NULL default '0'"
 		),
 		'email' => array
