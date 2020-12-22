@@ -41,7 +41,7 @@ $GLOBALS['TL_DCA']['tl_mailkonten'] = array
 		),
 		'label' => array
 		(
-			'fields'                  => array('name', 'vorname', 'klasse', 'nr', 'ausbdat', 'prue_datum'),
+			'fields'                  => array('email', 'mailbox_groesse', 'art', 'leerung', 'spam', 'auto_responder', 'auslastung', 'anmerkungen'),
 			'showColumns'             => true
 		),
 		'global_operations' => array
@@ -86,7 +86,7 @@ $GLOBALS['TL_DCA']['tl_mailkonten'] = array
 	// Palettes
 	'palettes' => array
 	(
-		'default'                     => '{mail_legend},email,mailbox_groesse,passwort,art,leerung,spam,auslastung;{adresse_legend:hide},auto_responder,alias_adressen,weiterleitungen,anmerkungen'
+		'default'                     => '{mail_legend},email,art,spam,auslastung,mailbox_groesse,passwort,leerung,auto_responder;{adresse_legend:hide},alias_adressen,weiterleitungen,anmerkungen'
 	),
 
 	// Base fields in table tl_mailkonten
@@ -105,8 +105,8 @@ $GLOBALS['TL_DCA']['tl_mailkonten'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_mailkonten']['passwort'],
 			'inputType'               => 'text',
 			'exclude'                 => true,
-			'search'                  => true,
-			'sorting'                 => true,
+			'search'                  => false,
+			'sorting'                 => false,
 			'filter'                  => false,
 			'sql'                     => "varchar(64) NOT NULL default ''",
 			'eval'                    => array
@@ -120,7 +120,7 @@ $GLOBALS['TL_DCA']['tl_mailkonten'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_mailkonten']['mailbox_groesse'],
 			'inputType'               => 'text',
 			'exclude'                 => true,
-			'search'                  => true,
+			'search'                  => false,
 			'sorting'                 => true,
 			'filter'                  => false,
 			'eval'                    => array
@@ -137,7 +137,7 @@ $GLOBALS['TL_DCA']['tl_mailkonten'] = array
 			'exclude'                 => true,
 			'search'                  => true,
 			'sorting'                 => true,
-			'filter'                  => false,
+			'filter'                  => true,
 			'sql'                     => "varchar(50) NOT NULL default ''",
 			'eval'                    => array
 			(
@@ -149,12 +149,13 @@ $GLOBALS['TL_DCA']['tl_mailkonten'] = array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_mailkonten']['art'],
 			'exclude'                 => true,
+			'filter'                  => true,
 			'inputType'               => 'select',
 			'options'                 => $GLOBALS['TL_LANG']['tl_mailkonten']['art_options'],
 			'eval'                    => array
 			(
 				'includeBlankOption'  => true, 
-				'tl_class'            => 'w50'
+				'tl_class'            => 'w50 clr'
 			),
 			'sql'                     => "char(1) NOT NULL default ''"
 		),
@@ -162,6 +163,7 @@ $GLOBALS['TL_DCA']['tl_mailkonten'] = array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_mailkonten']['spam'],
 			'exclude'                 => true,
+			'filter'                  => true,
 			'inputType'               => 'select',
 			'options'                 => $GLOBALS['TL_LANG']['tl_mailkonten']['spam_options'],
 			'eval'                    => array
@@ -175,6 +177,7 @@ $GLOBALS['TL_DCA']['tl_mailkonten'] = array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_mailkonten']['auslastung'],
 			'exclude'                 => true,
+			'filter'                  => true,
 			'inputType'               => 'select',
 			'options'                 => $GLOBALS['TL_LANG']['tl_mailkonten']['auslastung_options'],
 			'eval'                    => array
@@ -258,7 +261,7 @@ $GLOBALS['TL_DCA']['tl_mailkonten'] = array
 			'filter'                  => true,
 			'eval'                    => array
 			(
-				'tl_class'            => 'w50',
+				'tl_class'            => 'w50 clr',
 				'isBoolean'           => true
 			),
 			'sql'                     => "char(1) NOT NULL default ''"

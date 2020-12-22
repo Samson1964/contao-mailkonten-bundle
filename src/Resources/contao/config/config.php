@@ -11,7 +11,7 @@
  * @copyright Frank Hoppe 2014
  */
 
-$GLOBALS['BE_MOD']['content']['schiedsrichter'] = array
+$GLOBALS['BE_MOD']['content']['mailkonten'] = array
 (
 	'tables'         => array('tl_mailkonten'),
 	'icon'           => 'bundles/contaomailkonten/images/icon.png'

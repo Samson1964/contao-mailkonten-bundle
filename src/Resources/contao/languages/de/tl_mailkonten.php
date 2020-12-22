@@ -19,7 +19,7 @@ $GLOBALS['TL_LANG']['tl_mailkonten']['toggle'] = array('Eintrag %s aktivieren/de
 $GLOBALS['TL_LANG']['tl_mailkonten']['show'] = array('Details zum Eintrag %s anzeigen', 'Details zum Eintrag %s anzeigen');
 
 // Formularfelder
-$GLOBALS['TL_LANG']['tl_mailkonten']['mail_legend'] = 'E-Mail';
+$GLOBALS['TL_LANG']['tl_mailkonten']['mail_legend'] = 'Postfach';
 $GLOBALS['TL_LANG']['tl_mailkonten']['email'] = array('E-Mail', 'E-Mail-Adresse');
 $GLOBALS['TL_LANG']['tl_mailkonten']['mailbox_groesse'] = array('Größe', 'Größe des Postfachs in MB');
 $GLOBALS['TL_LANG']['tl_mailkonten']['art'] = array('Art', 'Art des Postfachs');
@@ -28,6 +28,8 @@ $GLOBALS['TL_LANG']['tl_mailkonten']['auto_responder'] = array('Auto-Responder',
 $GLOBALS['TL_LANG']['tl_mailkonten']['leerung'] = array('Leerung', 'Leerung vom Inhaber des Postfachs');
 $GLOBALS['TL_LANG']['tl_mailkonten']['auslastung'] = array('Auslastung', 'Auslastung des Postfachs');
 $GLOBALS['TL_LANG']['tl_mailkonten']['passwort'] = array('Passwort', 'Passwort des Postfaches');
+
+$GLOBALS['TL_LANG']['tl_mailkonten']['adresse_legend'] = 'Informationen';
 $GLOBALS['TL_LANG']['tl_mailkonten']['alias_adressen'] = array('Alias-Adressen', 'Alias-Adressen');
 $GLOBALS['TL_LANG']['tl_mailkonten']['weiterleitungen'] = array('Weiterleitungen', 'Weiterleitungen');
 $GLOBALS['TL_LANG']['tl_mailkonten']['anmerkungen'] = array('Anmerkungen', 'Anmerkungen');
