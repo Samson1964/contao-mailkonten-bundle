@@ -1,4 +1,4 @@
-<?php if (!defined('TL_ROOT')) die('You cannot access this file directly!');
+<?php
 
 /**
  * Contao Open Source CMS
@@ -14,5 +14,6 @@
 $GLOBALS['BE_MOD']['content']['mailkonten'] = array
 (
 	'tables'         => array('tl_mailkonten'),
+	'export'         => array('Schachbulle\ContaoMailkontenBundle\Classes\Export', 'exportText'),
 	'icon'           => 'bundles/contaomailkonten/images/icon.png'
 );

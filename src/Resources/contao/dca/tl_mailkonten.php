@@ -25,7 +25,7 @@ $GLOBALS['TL_DCA']['tl_mailkonten'] = array
 			(
 				'id'             => 'primary',
 				'email'          => 'index',
-				'email'          => 'unique'
+				'email'          => 'unique',
 			)
 		)
 	),
@@ -41,11 +41,19 @@ $GLOBALS['TL_DCA']['tl_mailkonten'] = array
 		),
 		'label' => array
 		(
-			'fields'                  => array('email', 'pop3', 'alias', 'forward', 'mailinglist', 'anmerkungen'),
-			'showColumns'             => true
+			'fields'                  => array('email', 'pop3', 'forward', 'alias', 'mailinglist', 'info', 'tstamp'),
+			'showColumns'             => true,
+			'label_callback'          => array('tl_mailkonten','getRecord')
 		),
 		'global_operations' => array
 		(
+			'export' => array
+			(
+				'label'               => &$GLOBALS['TL_LANG']['tl_lizenzverwaltung']['export'],
+				'href'                => 'key=export',
+				'icon'                => 'bundles/contaomailkonten/images/export.png',
+				'attributes'          => 'onclick="Backend.getScrollOffset();"'
+			),
 			'all' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['MSC']['all'],
@@ -75,6 +83,13 @@ $GLOBALS['TL_DCA']['tl_mailkonten'] = array
 				'icon'                => 'delete.gif',
 				'attributes'          => 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"'
 			),
+			'toggle' => array
+			(
+				'label'               => &$GLOBALS['TL_LANG']['tl_mailkonten']['toggle'],
+				'icon'                => 'visible.gif',
+				'attributes'          => 'onclick="Backend.getScrollOffset();return AjaxRequest.toggleVisibility(this,%s)"',
+				'button_callback'     => array('tl_mailkonten', 'toggleIcon')
+			), 
 			'show' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_mailkonten']['show'],
@@ -87,7 +102,7 @@ $GLOBALS['TL_DCA']['tl_mailkonten'] = array
 	'palettes' => array
 	(
 		'__selector__'                => array('pop3', 'forward', 'alias', 'mailinglist'),
-		'default'                     => '{mail_legend},email;{pop3_legend},pop3;{forward_legend},forward;{alias_legend:hide},alias;{responder_legend:hide},auto_responder;{mailingliste_legend},mailinglist;{history_legend:hide},history;{info_legend:hide},anmerkungen;{publish_legend},published'
+		'default'                     => '{mail_legend},email,info;{pop3_legend},pop3;{forward_legend},forward;{alias_legend:hide},alias;{responder_legend:hide},auto_responder;{mailingliste_legend},mailinglist;{history_legend:hide},history;{info_legend:hide},anmerkungen;{publish_legend},published'
 	),
 
 	// Subpalettes
@@ -108,7 +123,10 @@ $GLOBALS['TL_DCA']['tl_mailkonten'] = array
 		),
 		'tstamp' => array
 		(
-			'sql'                     => "int(10) unsigned NOT NULL default '0'"
+			'label'                   => &$GLOBALS['TL_LANG']['tl_mailkonten']['tstamp'],
+			'flag'                    => 5,
+			'sorting'                 => true,
+			'sql'                     => "int(10) unsigned NOT NULL default '0'",
 		),
 		'email' => array
 		(
@@ -122,6 +140,23 @@ $GLOBALS['TL_DCA']['tl_mailkonten'] = array
 			'eval'                    => array
 			(
 				'rgxp'                => 'email',
+				'mandatory'           => true,
+				'tl_class'            => 'w50'
+			)
+		),
+		'info' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_mailkonten']['info'],
+			'inputType'               => 'text',
+			'exclude'                 => true,
+			'search'                  => true,
+			'sorting'                 => true,
+			'filter'                  => true,
+			'sql'                     => "varchar(255) NOT NULL default ''",
+			'eval'                    => array
+			(
+				'mandatory'           => false,
+				'maxlength'           => 255,
 				'tl_class'            => 'w50'
 			)
 		),
@@ -333,6 +368,17 @@ $GLOBALS['TL_DCA']['tl_mailkonten'] = array
 					'forwarder_email' => array
 					(
 						'label'                 => &$GLOBALS['TL_LANG']['tl_mailkonten']['forwarder_email'],
+						'exclude'               => true,
+						'inputType'             => 'text',
+						'eval'                  => array
+						(
+							'valign'            => 'middle',
+							'style'             => 'width:100%;'
+						)
+					),
+					'forwarder_inhaber' => array
+					(
+						'label'                 => &$GLOBALS['TL_LANG']['tl_mailkonten']['forwarder_inhaber'],
 						'exclude'               => true,
 						'inputType'             => 'text',
 						'eval'                  => array
@@ -578,14 +624,14 @@ $GLOBALS['TL_DCA']['tl_mailkonten'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_mailkonten']['published'],
 			'inputType'               => 'checkbox',
 			'exclude'                 => true,
-			'default'                 => false,
+			'default'                 => true,
 			'filter'                  => true,
 			'eval'                    => array
 			(
 				'tl_class'            => 'w50',
 				'isBoolean'           => true
 			),
-			'sql'                     => "char(1) NOT NULL default ''"
+			'sql'                     => "char(1) NOT NULL default '1'"
 		),
 	),
 );
@@ -604,6 +650,130 @@ class tl_mailkonten extends \Backend
 	{
 		if($value) return strtotime(date('Y-m-d', $value) . ' 00:00:00');
 		return '';
+	}
+
+	/**
+	 * Ändert das Aussehen des Toggle-Buttons.
+	 * @param $row
+	 * @param $href
+	 * @param $label
+	 * @param $title
+	 * @param $icon
+	 * @param $attributes
+	 * @return string
+	 */
+	public function toggleIcon($row, $href, $label, $title, $icon, $attributes)
+	{
+		$this->import('BackendUser', 'User');
+		
+		if (strlen($this->Input->get('tid')))
+		{
+			$this->toggleVisibility($this->Input->get('tid'), ($this->Input->get('state') == 0));
+			$this->redirect($this->getReferer());
+		}
+		
+		// Check permissions AFTER checking the tid, so hacking attempts are logged
+		if (!$this->User->isAdmin && !$this->User->hasAccess('tl_mailkonten::published', 'alexf'))
+		{
+			return '';
+		}
+		
+		$href .= '&amp;id='.$this->Input->get('id').'&amp;tid='.$row['id'].'&amp;state='.$row[''];
+		
+		if (!$row['published'])
+		{
+			$icon = 'invisible.gif';
+		}
+		
+		return '<a href="'.$this->addToUrl($href).'" title="'.specialchars($title).'"'.$attributes.'>'.$this->generateImage($icon, $label).'</a> ';
+	}
+
+	/**
+	 * Toggle the visibility of an element
+	 * @param integer
+	 * @param boolean
+	 */
+	public function toggleVisibility($intId, $blnPublished)
+	{
+		// Check permissions to publish
+		if (!$this->User->isAdmin && !$this->User->hasAccess('tl_mailkonten::published', 'alexf'))
+		{
+			$this->log('Not enough permissions to show/hide record ID "'.$intId.'"', 'tl_mailkonten toggleVisibility', TL_ERROR);
+			$this->redirect('contao/main.php?act=error');
+		}
+		
+		$this->createInitialVersion('tl_mailkonten', $intId);
+		
+		// Trigger the save_callback
+		if (is_array($GLOBALS['TL_DCA']['tl_mailkonten']['fields']['published']['save_callback']))
+		{
+			foreach ($GLOBALS['TL_DCA']['tl_mailkonten']['fields']['published']['save_callback'] as $callback)
+			{
+				$this->import($callback[0]);
+				$blnPublished = $this->$callback[0]->$callback[1]($blnPublished, $this);
+			}
+		}
+		
+		// Update the database
+		$this->Database->prepare("UPDATE tl_mailkonten SET tstamp=". time() .", published='" . ($blnPublished ? '' : '1') . "' WHERE id=?")
+		               ->execute($intId);
+		$this->createNewVersion('tl_mailkonten', $intId);
+	}
+
+    /**
+     * Add an image to each record
+     * @param array
+     * @param string
+     * @param DataContainer
+     * @param array
+     * @return string
+     */
+	public function getRecord($row, $label, \DataContainer $dc, $args)
+	{
+		// POP3/IMAP ergänzen
+		if($row['pop3'])
+		{
+			$args[1] = $row['mailbox_groesse'].' MB ('.$row['auslastung'].'%)';
+		}
+		else
+		{
+			$args[1] = '-';
+		}
+
+		// Weiterleitungen ergänzen
+		if($row['forward'])
+		{
+			$forwarder = unserialize($row['forwarder']);
+			$daten = array();
+			foreach($forwarder as $item)
+			{
+				$daten[] = '<span title="'.$item['forwarder_email'].'">'.substr($item['forwarder_email'], 0, 16).'</span>';
+			}
+			$args[2] = implode('<br>', $daten);
+		}
+		else
+		{
+			$args[2] = '-';
+		}
+
+		// Alias ergänzen
+		if($row['alias'])
+		{
+			$aliase = unserialize($row['aliase']);
+			$daten = array();
+			foreach($aliase as $item)
+			{
+				$daten[] = '<span title="'.$item['aliase_email'].'">'.substr($item['aliase_email'], 0, 16).'</span>';
+			}
+			$args[3] = implode('<br>', $daten);
+		}
+		else
+		{
+			$args[3] = '-';
+		}
+
+		return $args;
+
 	}
 
 }

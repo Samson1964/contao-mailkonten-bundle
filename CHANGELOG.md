@@ -1,5 +1,16 @@
 # Mailkonten Changelog
 
+## Version 1.3.0 (2022-03-10)
+
+* Fix: Übersetzungen
+* Change: published-Feld default auf true setzen
+* Add: Toggle-Funktion für published
+* Add: Aktualisierungsdatum ausgeben in Übersicht
+* Add: MCW Weiterleitungen: Feld für Inhaber hinzufügen
+* Add: Kurzer Infotext zur E-Mail (direkt neben email-Feld)
+* Add: Kontenübersicht: mehr Informationen anzeigen
+* Add: Export der Konten in eine Textdatei (mit Option: welche Felder)
+
 ## Version 1.2.0 (2022-03-10)
 
 * Fix: Inhaber-Feld mit rgxp=email
