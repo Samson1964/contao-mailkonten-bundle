@@ -1,5 +1,10 @@
 # Mailkonten Changelog
 
+## Version 1.2.0 (2022-03-10)
+
+* Fix: Inhaber-Feld mit rgxp=email
+* Change: Umbau des Formulars
+
 ## Version 1.1.1 (2022-03-10)
 
 * Add: Konto-Art Weiterleitung/Mailingliste
