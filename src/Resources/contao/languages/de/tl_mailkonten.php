@@ -30,8 +30,19 @@ $GLOBALS['TL_LANG']['tl_mailkonten']['auslastung'] = array('Auslastung', 'Auslas
 $GLOBALS['TL_LANG']['tl_mailkonten']['passwort'] = array('Passwort', 'Passwort des Postfaches');
 
 $GLOBALS['TL_LANG']['tl_mailkonten']['adresse_legend'] = 'Informationen';
-$GLOBALS['TL_LANG']['tl_mailkonten']['alias_adressen'] = array('Alias-Adressen', 'Alias-Adressen');
-$GLOBALS['TL_LANG']['tl_mailkonten']['weiterleitungen'] = array('Weiterleitungen', 'Weiterleitungen');
+$GLOBALS['TL_LANG']['tl_mailkonten']['aliase'] = array('Alias-Adressen', 'Alias-Adressen');
+$GLOBALS['TL_LANG']['tl_mailkonten']['aliase_email'] = array('E-Mail', '');
+$GLOBALS['TL_LANG']['tl_mailkonten']['aliase_date'] = array('Einrichtungsdatum', '');
+$GLOBALS['TL_LANG']['tl_mailkonten']['aliase_info'] = array('Grund', '');
+$GLOBALS['TL_LANG']['tl_mailkonten']['forwarder'] = array('Weiterleitungen', 'Weiterleitungen');
+$GLOBALS['TL_LANG']['tl_mailkonten']['forwarder_email'] = array('E-Mail', '');
+$GLOBALS['TL_LANG']['tl_mailkonten']['forwarder_date'] = array('Einrichtungsdatum', '');
+$GLOBALS['TL_LANG']['tl_mailkonten']['forwarder_info'] = array('Grund', '');
+$GLOBALS['TL_LANG']['tl_mailkonten']['history'] = array('Bearbeitungsgeschichte', 'Bearbeitungsgeschichte');
+$GLOBALS['TL_LANG']['tl_mailkonten']['history_date'] = array('Bearbeitungsdatum', '');
+$GLOBALS['TL_LANG']['tl_mailkonten']['history_info'] = array('Grund', '');
+$GLOBALS['TL_LANG']['tl_mailkonten']['alias_adressen'] = array('Alias-Adressen (veraltet!)', 'Alias-Adressen');
+$GLOBALS['TL_LANG']['tl_mailkonten']['weiterleitungen'] = array('Weiterleitungen (veraltet!)', 'Weiterleitungen');
 $GLOBALS['TL_LANG']['tl_mailkonten']['anmerkungen'] = array('Anmerkungen', 'Anmerkungen');
 
 $GLOBALS['TL_LANG']['tl_mailkonten']['art_options'] = array

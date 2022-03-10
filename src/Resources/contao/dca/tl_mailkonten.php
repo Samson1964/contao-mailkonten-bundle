@@ -86,7 +86,7 @@ $GLOBALS['TL_DCA']['tl_mailkonten'] = array
 	// Palettes
 	'palettes' => array
 	(
-		'default'                     => '{mail_legend},email,art,spam,auslastung,mailbox_groesse,passwort,leerung,auto_responder;{adresse_legend:hide},alias_adressen,weiterleitungen,anmerkungen'
+		'default'                     => '{mail_legend},email,art,spam,auslastung,mailbox_groesse,passwort,leerung,auto_responder;{adresse_legend:hide},aliase,forwarder,history,alias_adressen,weiterleitungen,anmerkungen'
 	),
 
 	// Base fields in table tl_mailkonten
@@ -187,6 +187,162 @@ $GLOBALS['TL_DCA']['tl_mailkonten'] = array
 			),
 			'sql'                     => "int(3) unsigned NOT NULL default '0'"
 		),
+		'aliase' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_mailkonten']['aliase'],
+			'exclude'                 => true,
+			'inputType'               => 'multiColumnWizard',
+			'eval'                    => array
+			(
+				'tl_class'            => 'clr',
+				'buttonPos'           => 'top',
+				'columnFields'        => array
+				(
+					'aliase_email' => array
+					(
+						'label'                 => &$GLOBALS['TL_LANG']['tl_mailkonten']['aliase_email'],
+						'exclude'               => true,
+						'inputType'             => 'text',
+						'eval'                  => array
+						(
+							'valign'            => 'middle',
+							'style'             => 'width:100%;'
+						)
+					),
+					'aliase_date' => array
+					(
+						'label'                 => &$GLOBALS['TL_LANG']['tl_mailkonten']['aliase_date'],
+						'exclude'               => true,
+						'inputType'             => 'text',
+						'default'               => time(),
+						'eval'                  => array
+						(
+							'rgxp'              => 'date',
+							'mandatory'         => false,
+							'doNotCopy'         => true,
+							'datepicker'        => true,
+							'tl_class'          => 'wizard',
+							'style'             => 'width:90%;'
+						),
+						'load_callback' => array
+						(
+							array('tl_mailkonten', 'loadDate')
+						),
+					),
+					'aliase_info' => array
+					(
+						'label'                 => &$GLOBALS['TL_LANG']['tl_mailkonten']['aliase_info'],
+						'exclude'               => true,
+						'inputType'             => 'text',
+						'eval'                  => array
+						(
+							'style'             => 'width:100%;'
+						)
+					),
+				)
+			),
+			'sql'                   => "blob NULL"
+		),
+		'forwarder' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_mailkonten']['forwarder'],
+			'exclude'                 => true,
+			'inputType'               => 'multiColumnWizard',
+			'eval'                    => array
+			(
+				'tl_class'            => 'clr',
+				'buttonPos'           => 'top',
+				'columnFields'        => array
+				(
+					'forwarder_email' => array
+					(
+						'label'                 => &$GLOBALS['TL_LANG']['tl_mailkonten']['forwarder_email'],
+						'exclude'               => true,
+						'inputType'             => 'text',
+						'eval'                  => array
+						(
+							'valign'            => 'middle',
+							'style'             => 'width:100%;'
+						)
+					),
+					'forwarder_date' => array
+					(
+						'label'                 => &$GLOBALS['TL_LANG']['tl_mailkonten']['forwarder_date'],
+						'exclude'               => true,
+						'inputType'             => 'text',
+						'default'               => time(),
+						'eval'                  => array
+						(
+							'rgxp'              => 'date',
+							'mandatory'         => false,
+							'doNotCopy'         => true,
+							'datepicker'        => true,
+							'tl_class'          => 'wizard',
+							'style'             => 'width:90%;'
+						),
+						'load_callback' => array
+						(
+							array('tl_mailkonten', 'loadDate')
+						),
+					),
+					'forwarder_info' => array
+					(
+						'label'                 => &$GLOBALS['TL_LANG']['tl_mailkonten']['forwarder_info'],
+						'exclude'               => true,
+						'inputType'             => 'text',
+						'eval'                  => array
+						(
+							'style'             => 'width:100%;'
+						)
+					),
+				)
+			),
+			'sql'                   => "blob NULL"
+		),
+		'history' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_mailkonten']['history'],
+			'exclude'                 => true,
+			'inputType'               => 'multiColumnWizard',
+			'eval'                    => array
+			(
+				'tl_class'            => 'clr',
+				'buttonPos'           => 'top',
+				'columnFields'        => array
+				(
+					'history_date' => array
+					(
+						'label'                 => &$GLOBALS['TL_LANG']['tl_mailkonten']['history_date'],
+						'exclude'               => true,
+						'inputType'             => 'text',
+						'default'               => time(),
+						'eval'                  => array
+						(
+							'rgxp'              => 'date',
+							'mandatory'         => false,
+							'doNotCopy'         => true,
+							'datepicker'        => true,
+							'tl_class'          => 'wizard',
+							'style'             => 'width:150px;'
+						),
+						'load_callback' => array
+						(
+							array('tl_mailkonten', 'loadDate')
+						),
+					),
+					'history_info' => array
+					(
+						'label'                 => &$GLOBALS['TL_LANG']['tl_mailkonten']['history_info'],
+						'exclude'               => true,
+						'inputType'             => 'textarea',
+						'eval'                  => array
+						(
+						)
+					),
+				)
+			),
+			'sql'                   => "blob NULL"
+		),
 		'alias_adressen' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_mailkonten']['alias_adressen'],
@@ -271,4 +427,17 @@ $GLOBALS['TL_DCA']['tl_mailkonten'] = array
 
 class tl_mailkonten extends \Backend
 {
+
+	/**
+	 * Set the timestamp to 00:00:00 (see #26)
+	 *
+	 * @param integer $value
+	 *
+	 * @return integer
+	 */
+	public function loadDate($value)
+	{
+		return strtotime(date('Y-m-d', $value) . ' 00:00:00');
+	}
+
 }

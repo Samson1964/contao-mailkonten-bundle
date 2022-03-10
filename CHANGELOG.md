@@ -1,5 +1,10 @@
 # Mailkonten Changelog
 
+## Version 1.1.0 (2022-03-10)
+
+* Add: Abhängigkeit menatwork/contao-multicolumnwizard-bundle
+* Add: MCW für Alias-Adressen, Weiterleitungen und Bearbeitungsgeschichte
+
 ## Version 1.0.0 (2020-12-22)
 
 * Fix: BE-Modul wurde nicht angezeigt
