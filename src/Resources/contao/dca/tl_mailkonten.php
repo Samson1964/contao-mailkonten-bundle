@@ -41,7 +41,7 @@ $GLOBALS['TL_DCA']['tl_mailkonten'] = array
 		),
 		'label' => array
 		(
-			'fields'                  => array('email', 'mailbox_groesse', 'art', 'leerung', 'spam', 'auto_responder', 'auslastung', 'anmerkungen'),
+			'fields'                  => array('email', 'mailbox_groesse', 'art', 'leerung', 'auslastung', 'anmerkungen'),
 			'showColumns'             => true
 		),
 		'global_operations' => array
@@ -86,7 +86,7 @@ $GLOBALS['TL_DCA']['tl_mailkonten'] = array
 	// Palettes
 	'palettes' => array
 	(
-		'default'                     => '{mail_legend},email,art,spam,auslastung,mailbox_groesse,passwort,leerung,auto_responder;{adresse_legend:hide},aliase,forwarder,history,alias_adressen,weiterleitungen,anmerkungen'
+		'default'                     => '{mail_legend},email,inhaber,art,spam,auslastung,mailbox_groesse,passwort,leerung,auto_responder;{adresse_legend:hide},aliase,forwarder;{history_legend:hide},history;{adresse2_legend:hide},alias_adressen,weiterleitungen;{info_legend:hide},anmerkungen'
 	),
 
 	// Base fields in table tl_mailkonten
@@ -138,12 +138,27 @@ $GLOBALS['TL_DCA']['tl_mailkonten'] = array
 			'search'                  => true,
 			'sorting'                 => true,
 			'filter'                  => true,
-			'sql'                     => "varchar(50) NOT NULL default ''",
+			'sql'                     => "varchar(255) NOT NULL default ''",
 			'eval'                    => array
 			(
 				'rgxp'                => 'email',
 				'tl_class'            => 'w50'
 			)
+		),
+		'inhaber' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_mailkonten']['inhaber'],
+			'inputType'               => 'text',
+			'exclude'                 => true,
+			'search'                  => true,
+			'sorting'                 => true,
+			'filter'                  => true,
+			'eval'                    => array
+			(
+				'rgxp'                => 'email',
+				'tl_class'            => 'w50'
+			),
+			'sql'                     => "varchar(255) NOT NULL default ''"
 		),
 		'art' => array
 		(
@@ -214,7 +229,6 @@ $GLOBALS['TL_DCA']['tl_mailkonten'] = array
 						'label'                 => &$GLOBALS['TL_LANG']['tl_mailkonten']['aliase_date'],
 						'exclude'               => true,
 						'inputType'             => 'text',
-						'default'               => time(),
 						'eval'                  => array
 						(
 							'rgxp'              => 'date',
@@ -270,7 +284,6 @@ $GLOBALS['TL_DCA']['tl_mailkonten'] = array
 						'label'                 => &$GLOBALS['TL_LANG']['tl_mailkonten']['forwarder_date'],
 						'exclude'               => true,
 						'inputType'             => 'text',
-						'default'               => time(),
 						'eval'                  => array
 						(
 							'rgxp'              => 'date',
@@ -315,7 +328,6 @@ $GLOBALS['TL_DCA']['tl_mailkonten'] = array
 						'label'                 => &$GLOBALS['TL_LANG']['tl_mailkonten']['history_date'],
 						'exclude'               => true,
 						'inputType'             => 'text',
-						'default'               => time(),
 						'eval'                  => array
 						(
 							'rgxp'              => 'date',
@@ -437,7 +449,8 @@ class tl_mailkonten extends \Backend
 	 */
 	public function loadDate($value)
 	{
-		return strtotime(date('Y-m-d', $value) . ' 00:00:00');
+		if($value) return strtotime(date('Y-m-d', $value) . ' 00:00:00');
+		return '';
 	}
 
 }

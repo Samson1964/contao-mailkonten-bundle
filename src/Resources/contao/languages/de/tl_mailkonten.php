@@ -21,6 +21,7 @@ $GLOBALS['TL_LANG']['tl_mailkonten']['show'] = array('Details zum Eintrag %s anz
 // Formularfelder
 $GLOBALS['TL_LANG']['tl_mailkonten']['mail_legend'] = 'Postfach';
 $GLOBALS['TL_LANG']['tl_mailkonten']['email'] = array('E-Mail', 'E-Mail-Adresse');
+$GLOBALS['TL_LANG']['tl_mailkonten']['inhaber'] = array('Besitzer', 'Name des Kontobesitzeers/Inhabers');
 $GLOBALS['TL_LANG']['tl_mailkonten']['mailbox_groesse'] = array('Größe', 'Größe des Postfachs in MB');
 $GLOBALS['TL_LANG']['tl_mailkonten']['art'] = array('Art', 'Art des Postfachs');
 $GLOBALS['TL_LANG']['tl_mailkonten']['spam'] = array('Spam', 'Was wird mit Spam gemacht?');
@@ -29,7 +30,7 @@ $GLOBALS['TL_LANG']['tl_mailkonten']['leerung'] = array('Leerung', 'Leerung vom 
 $GLOBALS['TL_LANG']['tl_mailkonten']['auslastung'] = array('Auslastung', 'Auslastung des Postfachs');
 $GLOBALS['TL_LANG']['tl_mailkonten']['passwort'] = array('Passwort', 'Passwort des Postfaches');
 
-$GLOBALS['TL_LANG']['tl_mailkonten']['adresse_legend'] = 'Informationen';
+$GLOBALS['TL_LANG']['tl_mailkonten']['adresse_legend'] = 'Aliase und Weiterleitungen';
 $GLOBALS['TL_LANG']['tl_mailkonten']['aliase'] = array('Alias-Adressen', 'Alias-Adressen');
 $GLOBALS['TL_LANG']['tl_mailkonten']['aliase_email'] = array('E-Mail', '');
 $GLOBALS['TL_LANG']['tl_mailkonten']['aliase_date'] = array('Einrichtungsdatum', '');
@@ -38,11 +39,17 @@ $GLOBALS['TL_LANG']['tl_mailkonten']['forwarder'] = array('Weiterleitungen', 'We
 $GLOBALS['TL_LANG']['tl_mailkonten']['forwarder_email'] = array('E-Mail', '');
 $GLOBALS['TL_LANG']['tl_mailkonten']['forwarder_date'] = array('Einrichtungsdatum', '');
 $GLOBALS['TL_LANG']['tl_mailkonten']['forwarder_info'] = array('Grund', '');
+
+$GLOBALS['TL_LANG']['tl_mailkonten']['history_legend'] = 'Bearbeitungen';
 $GLOBALS['TL_LANG']['tl_mailkonten']['history'] = array('Bearbeitungsgeschichte', 'Bearbeitungsgeschichte');
 $GLOBALS['TL_LANG']['tl_mailkonten']['history_date'] = array('Bearbeitungsdatum', '');
 $GLOBALS['TL_LANG']['tl_mailkonten']['history_info'] = array('Grund', '');
+
+$GLOBALS['TL_LANG']['tl_mailkonten']['adresse2_legend'] = 'Aliase und Weiterleitungen (veraltet!)';
 $GLOBALS['TL_LANG']['tl_mailkonten']['alias_adressen'] = array('Alias-Adressen (veraltet!)', 'Alias-Adressen');
 $GLOBALS['TL_LANG']['tl_mailkonten']['weiterleitungen'] = array('Weiterleitungen (veraltet!)', 'Weiterleitungen');
+
+$GLOBALS['TL_LANG']['tl_mailkonten']['info_legend'] = 'Informationen';
 $GLOBALS['TL_LANG']['tl_mailkonten']['anmerkungen'] = array('Anmerkungen', 'Anmerkungen');
 
 $GLOBALS['TL_LANG']['tl_mailkonten']['art_options'] = array
@@ -52,7 +59,8 @@ $GLOBALS['TL_LANG']['tl_mailkonten']['art_options'] = array
 	'3' => 'Weiterleitung',
 	'4' => 'POP3/Weiterleitung',
 	'5' => 'Mailingliste',
-	'6' => 'IMAP'
+	'7' => 'Weiterleitung/Mailingliste',
+	'6' => 'IMAP',
 );
 
 $GLOBALS['TL_LANG']['tl_mailkonten']['spam_options'] = array

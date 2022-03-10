@@ -1,5 +1,11 @@
 # Mailkonten Changelog
 
+## Version 1.1.1 (2022-03-10)
+
+* Add: Konto-Art Weiterleitung/Mailingliste
+* Fix: Anzeigefehler im MCW beim Datum: 01.01.1970
+* Add: Inhaber-Feld
+
 ## Version 1.1.0 (2022-03-10)
 
 * Add: Abhängigkeit menatwork/contao-multicolumnwizard-bundle
