@@ -111,7 +111,7 @@ $GLOBALS['TL_DCA']['tl_mailkonten'] = array
 		'pop3'                        => 'inhaber,passwort,mailbox_groesse,auslastung,spam,leerung',
 		'forward'                     => 'forwarder,weiterleitungen',
 		'alias'                       => 'aliase,alias_adressen',
-		'mailinglist'                 => 'url,mlPasswort,mailingliste',
+		'mailinglist'                 => 'url,urlLinked,mlPasswort,mailingliste',
 	),
 
 	// Base fields in table tl_mailkonten
@@ -289,7 +289,7 @@ $GLOBALS['TL_DCA']['tl_mailkonten'] = array
 						'eval'                  => array
 						(
 							'valign'            => 'middle',
-							'style'             => 'width:100%;'
+							'style'             => 'width:400px;'
 						)
 					),
 					'aliase_date' => array
@@ -304,7 +304,7 @@ $GLOBALS['TL_DCA']['tl_mailkonten'] = array
 							'doNotCopy'         => true,
 							'datepicker'        => true,
 							'tl_class'          => 'wizard',
-							'style'             => 'width:90%;'
+							'style'             => 'width:150px;'
 						),
 						'load_callback' => array
 						(
@@ -373,7 +373,7 @@ $GLOBALS['TL_DCA']['tl_mailkonten'] = array
 						'eval'                  => array
 						(
 							'valign'            => 'middle',
-							'style'             => 'width:100%;'
+							'style'             => 'width:400px;'
 						)
 					),
 					'forwarder_inhaber' => array
@@ -384,7 +384,7 @@ $GLOBALS['TL_DCA']['tl_mailkonten'] = array
 						'eval'                  => array
 						(
 							'valign'            => 'middle',
-							'style'             => 'width:100%;'
+							'style'             => 'width:240px;'
 						)
 					),
 					'forwarder_date' => array
@@ -399,7 +399,7 @@ $GLOBALS['TL_DCA']['tl_mailkonten'] = array
 							'doNotCopy'         => true,
 							'datepicker'        => true,
 							'tl_class'          => 'wizard',
-							'style'             => 'width:90%;'
+							'style'             => 'width:150px;'
 						),
 						'load_callback' => array
 						(
@@ -506,6 +506,11 @@ $GLOBALS['TL_DCA']['tl_mailkonten'] = array
 				'mandatory'           => false,
 				'tl_class'            => 'w50'
 			)
+		),
+		// Gibt einen Link zum LiMS-Leitfaden aus
+		'urlLinked' => array
+		(
+			'input_field_callback'    => array('tl_mailkonten', 'getURL'),
 		),
 		'mlPasswort' => array
 		(
@@ -775,5 +780,25 @@ class tl_mailkonten extends \Backend
 		return $args;
 
 	}
+
+	public function getURL(\DataContainer $dc)
+	{
+		if($dc->activeRecord->url)
+		{
+			$text = 
+			'<h3><label for="ctrl_urlLinked">'.$GLOBALS['TL_LANG']['tl_mailkonten']['urlLinked'][0].'</label></h3>
+			<div class="w50 widget">
+			<div class="tl_text" style="border:0;"><span>&raquo; </span><a style="" href="'.$dc->activeRecord->url.'" target="_blank">Listenverwaltung aufrufen</a></div>
+			<p class="tl_help tl_tip" title="" style="margin-left:7px;">'.$GLOBALS['TL_LANG']['tl_mailkonten']['urlLinked'][1].'</p>
+			</div>';
+		}
+		else
+		{
+			'<div class="w50 widget"></div>';
+		}
+
+		return $text;
+	}
+
 
 }

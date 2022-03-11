@@ -1,5 +1,13 @@
 # Mailkonten Changelog
 
+## Version 1.3.1 (2022-03-11)
+
+* Change: MCW: Datumsfelder kleiner machen, E-Mail-Felder größer. Insbesondere bei Weiterleitungen.
+* Add: Änderungsdatum exportieren
+* Fix: Export-Ausgabe enthält unten einen HTML-Teil
+* Add: Nummern Spam im Export auflösen
+* Add: Mailinglisten-URL verlinken
+
 ## Version 1.3.0 (2022-03-10)
 
 * Fix: Übersetzungen

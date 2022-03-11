@@ -61,6 +61,7 @@ $GLOBALS['TL_LANG']['tl_mailkonten']['auto_responder'] = array('Auto-Responder',
 $GLOBALS['TL_LANG']['tl_mailkonten']['mailingliste_legend'] = 'Mailingliste';
 $GLOBALS['TL_LANG']['tl_mailkonten']['mailinglist'] = array('Mailingliste', 'Mailingliste aktivieren');
 $GLOBALS['TL_LANG']['tl_mailkonten']['url'] = array('Listenverwaltung', 'Link zur Listenverwaltung');
+$GLOBALS['TL_LANG']['tl_mailkonten']['urlLinked'] = array('', '');
 $GLOBALS['TL_LANG']['tl_mailkonten']['mlPasswort'] = array('Passwort', 'Passwort der Listenadministration');
 $GLOBALS['TL_LANG']['tl_mailkonten']['mailingliste'] = array('Adressen', '');
 $GLOBALS['TL_LANG']['tl_mailkonten']['mailingliste_email'] = array('E-Mail', '');
@@ -88,14 +89,6 @@ $GLOBALS['TL_LANG']['tl_mailkonten']['art_options'] = array
 	'5' => 'Mailingliste',
 	'7' => 'Weiterleitung/Mailingliste',
 	'6' => 'IMAP',
-);
-
-$GLOBALS['TL_LANG']['tl_mailkonten']['spam_options'] = array
-(
-	'1' => 'Zustellen',
-	'2' => 'Markieren',
-	'3' => 'Löschen',
-	'4' => 'Ablehnen'
 );
 
 $GLOBALS['TL_LANG']['tl_mailkonten']['auslastung_options'] = array
