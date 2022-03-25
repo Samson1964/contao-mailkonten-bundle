@@ -19,6 +19,7 @@ $GLOBALS['TL_DCA']['tl_mailkonten'] = array
 		'dataContainer'               => 'Table',
 		'enableVersioning'            => true,
 		'switchToEdit'                => true,
+		'markAsCopy'                  => 'email',
 		'sql' => array
 		(
 			'keys' => array

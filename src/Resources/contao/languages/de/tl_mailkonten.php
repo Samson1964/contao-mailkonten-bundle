@@ -11,22 +11,22 @@
  */
 
 // Standardfunktionen
-$GLOBALS['TL_LANG']['tl_mailkonten']['new'] = array('Neuer Eintrag', 'Neuer Eintrag');
-$GLOBALS['TL_LANG']['tl_mailkonten']['edit'] = array('Eintrag %s bearbeiten', 'Eintrag %s bearbeiten');
-$GLOBALS['TL_LANG']['tl_mailkonten']['copy'] = array('Eintrag %s kopieren', 'Eintrag %s kopieren');
-$GLOBALS['TL_LANG']['tl_mailkonten']['delete'] = array('Eintrag %s löschen', 'Eintrag %s löschen');
-$GLOBALS['TL_LANG']['tl_mailkonten']['toggle'] = array('Eintrag %s aktivieren/deaktivieren', 'Eintrag %s aktivieren/deaktivieren');
-$GLOBALS['TL_LANG']['tl_mailkonten']['show'] = array('Details zum Eintrag %s anzeigen', 'Details zum Eintrag %s anzeigen');
+$GLOBALS['TL_LANG']['tl_mailkonten']['new'] = array('Neues E-Mail-Konto', 'Neues E-Mail-Konto');
+$GLOBALS['TL_LANG']['tl_mailkonten']['edit'] = array('E-Mail-Konto ID %s bearbeiten', 'E-Mail-Konto ID %s bearbeiten');
+$GLOBALS['TL_LANG']['tl_mailkonten']['copy'] = array('E-Mail-Konto ID %s kopieren', 'E-Mail-Konto ID %s kopieren');
+$GLOBALS['TL_LANG']['tl_mailkonten']['delete'] = array('E-Mail-Konto ID %s löschen', 'E-Mail-Konto ID %s löschen');
+$GLOBALS['TL_LANG']['tl_mailkonten']['toggle'] = array('E-Mail-Konto ID %s aktivieren/deaktivieren', 'E-Mail-Konto ID %s aktivieren/deaktivieren');
+$GLOBALS['TL_LANG']['tl_mailkonten']['show'] = array('Details zum E-Mail-Konto ID %s anzeigen', 'Details zum E-Mail-Konto ID %s anzeigen');
 
 // Globale Funktionen
-$GLOBALS['TL_LANG']['tl_mailkonten']['export'] = array('Export', 'Export der angezeigten Mailkonten in eine Textdatei');
+$GLOBALS['TL_LANG']['tl_mailkonten']['export'] = array('Export', 'Export der angezeigten E-Mail-Konten in eine Textdatei');
 
 // Formularfelder
 $GLOBALS['TL_LANG']['tl_mailkonten']['tstamp'] = array('Aktualisiert', 'Aktualisierungsdatum');
 
-$GLOBALS['TL_LANG']['tl_mailkonten']['mail_legend'] = 'Postfach';
+$GLOBALS['TL_LANG']['tl_mailkonten']['mail_legend'] = 'E-Mail-Konto';
 $GLOBALS['TL_LANG']['tl_mailkonten']['email'] = array('E-Mail', 'E-Mail-Adresse');
-$GLOBALS['TL_LANG']['tl_mailkonten']['info'] = array('Info', 'Kurze Information zur E-Mail-Adresse');
+$GLOBALS['TL_LANG']['tl_mailkonten']['info'] = array('Info', 'Kurze Information zum E-Mail-Konto');
 
 $GLOBALS['TL_LANG']['tl_mailkonten']['pop3_legend'] = 'POP3/IMAP';
 $GLOBALS['TL_LANG']['tl_mailkonten']['pop3'] = array('POP3/IMAP', 'POP3/IMAP aktivieren');
@@ -78,7 +78,7 @@ $GLOBALS['TL_LANG']['tl_mailkonten']['info_legend'] = 'Informationen';
 $GLOBALS['TL_LANG']['tl_mailkonten']['anmerkungen'] = array('Anmerkungen', 'Anmerkungen');
 
 $GLOBALS['TL_LANG']['tl_mailkonten']['publish_legend'] = 'Aktivierung';
-$GLOBALS['TL_LANG']['tl_mailkonten']['published'] = array('Aktiv', 'E-Mail-Adresse aktiv');
+$GLOBALS['TL_LANG']['tl_mailkonten']['published'] = array('Aktiv', 'E-Mail-Konto aktiv (nicht gelöscht)');
 
 $GLOBALS['TL_LANG']['tl_mailkonten']['art_options'] = array
 (
@@ -94,14 +94,24 @@ $GLOBALS['TL_LANG']['tl_mailkonten']['art_options'] = array
 $GLOBALS['TL_LANG']['tl_mailkonten']['auslastung_options'] = array
 (
 	'1'   => '0%',
+	'5'   => '5%',
 	'10'  => '10%',
+	'15'  => '15%',
 	'20'  => '20%',
+	'25'  => '25%',
 	'30'  => '30%',
+	'35'  => '35%',
 	'40'  => '40%',
+	'45'  => '45%',
 	'50'  => '50%',
+	'55'  => '55%',
 	'60'  => '60%',
+	'65'  => '65%',
 	'70'  => '70%',
+	'75'  => '75%',
 	'80'  => '80%',
+	'85'  => '85%',
 	'90'  => '90%',
+	'95'  => '95%',
 	'100' => '100%',
 );

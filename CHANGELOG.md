@@ -1,5 +1,11 @@
 # Mailkonten Changelog
 
+## Version 1.3.2 (2022-03-25)
+
+* Fix: Kopieren eines Datensatz erzeugt Fehler. Feld email ist unique, deshalb Option markAsCopy für das Feld aktiviert.
+* Change: Checkbox für gelöschte Konten hinzufügen -> published-Feld nutze ich dafür
+* Change: Auslastungsoptionen verfeinert von 10er auf 5er Schritte
+
 ## Version 1.3.1 (2022-03-11)
 
 * Change: MCW: Datumsfelder kleiner machen, E-Mail-Felder größer. Insbesondere bei Weiterleitungen.
