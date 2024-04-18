@@ -1,5 +1,11 @@
 # Mailkonten Changelog
 
+## Version 1.4.0 (2024-04-18)
+
+* Add: codefog/contao-haste
+* Change: Haste-Toggler statt des normalen Togglers
+* Add: Kompatibilität PHP 8
+
 ## Version 1.3.2 (2022-03-25)
 
 * Fix: Kopieren eines Datensatz erzeugt Fehler. Feld email ist unique, deshalb Option markAsCopy für das Feld aktiviert.
