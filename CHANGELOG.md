@@ -1,5 +1,12 @@
 # Mailkonten Changelog
 
+## Version 1.5.0 (2024-07-11)
+
+* Add: tl_mailkonten neue Felder smtp_server,smtp_port,pop3_server,pop3_port,imap_server,imap_port für den Zugriff auf die Konten
+* Fix: Warning: Undefined array key "auslastung_options" in dca/tl_mailkonten.php (line 233)
+* Add: Public-Klasse email_check für die Abfrage der Mailkonten
+* Add: IMAP-Klasse für den Zugriff auf E-Mail-Konten
+
 ## Version 1.4.0 (2024-04-18)
 
 * Add: codefog/contao-haste

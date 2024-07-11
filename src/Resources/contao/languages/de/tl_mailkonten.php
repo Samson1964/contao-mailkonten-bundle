@@ -37,6 +37,14 @@ $GLOBALS['TL_LANG']['tl_mailkonten']['spam'] = array('Spam', 'Was wird mit Spam 
 $GLOBALS['TL_LANG']['tl_mailkonten']['leerung'] = array('Leerung', 'Leerung vom Inhaber des Postfachs');
 $GLOBALS['TL_LANG']['tl_mailkonten']['auslastung'] = array('Auslastung', 'Auslastung des Postfachs');
 $GLOBALS['TL_LANG']['tl_mailkonten']['passwort'] = array('Passwort', 'Passwort des Postfaches');
+$GLOBALS['TL_LANG']['tl_mailkonten']['pop3_server'] = array('POP3-Server', 'POP3-Server');
+$GLOBALS['TL_LANG']['tl_mailkonten']['pop3_port'] = array('Port für SSL-Abruf bei POP3-Nutzung', 'Port für SSL-Abruf bei POP3-Nutzung');
+$GLOBALS['TL_LANG']['tl_mailkonten']['smtp_server'] = array('SMTP-Server', 'Servername für SSL-Versand');
+$GLOBALS['TL_LANG']['tl_mailkonten']['smtp_port'] = array('Port für SSL-Versand', 'Port für SSL-Versand');
+$GLOBALS['TL_LANG']['tl_mailkonten']['imap_server'] = array('IMAP-Server', 'IMAP-Server');
+$GLOBALS['TL_LANG']['tl_mailkonten']['imap_port'] = array('Port für SSL-Abruf bei IMAP-Nutzung', 'Port für SSL-Abruf bei IMAP-Nutzung');
+$GLOBALS['TL_LANG']['tl_mailkonten']['backup'] = array('Backup', 'Backup erstellen. Dazu muß ein Cronjob erstellt werden.');
+$GLOBALS['TL_LANG']['tl_mailkonten']['checkup'] = array('Checkup', 'Kontozugriff simulieren. Dazu muß ein Cronjob erstellt werden.');
 
 $GLOBALS['TL_LANG']['tl_mailkonten']['forward_legend'] = 'Weiterleitungen';
 $GLOBALS['TL_LANG']['tl_mailkonten']['forward'] = array('Weiterleitung', 'Weiterleitung aktivieren');

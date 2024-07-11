@@ -116,7 +116,7 @@ $GLOBALS['TL_DCA']['tl_mailkonten'] = array
 	// Subpalettes
 	'subpalettes' => array
 	(
-		'pop3'                        => 'inhaber,passwort,mailbox_groesse,auslastung,spam,leerung',
+		'pop3'                        => 'inhaber,passwort,mailbox_groesse,auslastung,spam,leerung,smtp_server,smtp_port,pop3_server,pop3_port,imap_server,imap_port,backup,checkup',
 		'forward'                     => 'forwarder,weiterleitungen',
 		'alias'                       => 'aliase,alias_adressen',
 		'mailinglist'                 => 'url,urlLinked,mlPasswort,mailingliste',
@@ -230,7 +230,7 @@ $GLOBALS['TL_DCA']['tl_mailkonten'] = array
 			'exclude'                 => true,
 			'filter'                  => true,
 			'inputType'               => 'select',
-			'options'                 => $GLOBALS['TL_LANG']['tl_mailkonten']['auslastung_options'],
+			'options'                 => &$GLOBALS['TL_LANG']['tl_mailkonten']['auslastung_options'],
 			'eval'                    => array
 			(
 				'includeBlankOption'  => true, 
@@ -244,7 +244,7 @@ $GLOBALS['TL_DCA']['tl_mailkonten'] = array
 			'exclude'                 => true,
 			'filter'                  => true,
 			'inputType'               => 'select',
-			'options'                 => $GLOBALS['TL_LANG']['tl_mailkonten']['spam_options'],
+			'options'                 => &$GLOBALS['TL_LANG']['tl_mailkonten']['spam_options'],
 			'eval'                    => array
 			(
 				'includeBlankOption'  => true, 
@@ -261,7 +261,131 @@ $GLOBALS['TL_DCA']['tl_mailkonten'] = array
 			'filter'                  => true,
 			'eval'                    => array
 			(
-				'tl_class'            => 'w50',
+				'tl_class'            => 'w50 m12',
+				'isBoolean'           => true
+			),
+			'sql'                     => "char(1) NOT NULL default ''"
+		),
+		'smtp_server' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_mailkonten']['smtp_server'],
+			'inputType'               => 'text',
+			'exclude'                 => true,
+			'search'                  => false,
+			'sorting'                 => false,
+			'filter'                  => false,
+			'default'                 => 'sslout.de',
+			'eval'                    => array
+			(
+				'mandatory'           => false,
+				'tl_class'            => 'w50'
+			),
+			'sql'                     => "varchar(64) NOT NULL default 'sslout.de'"
+		),
+		'smtp_port' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_mailkonten']['smtp_port'],
+			'inputType'               => 'text',
+			'exclude'                 => true,
+			'search'                  => false,
+			'sorting'                 => false,
+			'filter'                  => false,
+			'default'                 => 465,
+			'eval'                    => array
+			(
+				'mandatory'           => false,
+				'tl_class'            => 'w50'
+			),
+			'sql'                     => "int(5) unsigned NOT NULL default '465'"
+		),
+		'pop3_server' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_mailkonten']['pop3_server'],
+			'inputType'               => 'text',
+			'exclude'                 => true,
+			'search'                  => false,
+			'sorting'                 => false,
+			'filter'                  => false,
+			'default'                 => 'sslin.de',
+			'eval'                    => array
+			(
+				'mandatory'           => false,
+				'tl_class'            => 'w50'
+			),
+			'sql'                     => "varchar(64) NOT NULL default 'sslin.de'"
+		),
+		'pop3_port' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_mailkonten']['pop3_port'],
+			'inputType'               => 'text',
+			'exclude'                 => true,
+			'search'                  => false,
+			'sorting'                 => false,
+			'filter'                  => false,
+			'default'                 => 995,
+			'eval'                    => array
+			(
+				'mandatory'           => false,
+				'tl_class'            => 'w50'
+			),
+			'sql'                     => "int(5) unsigned NOT NULL default '995'"
+		),
+		'imap_server' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_mailkonten']['imap_server'],
+			'inputType'               => 'text',
+			'exclude'                 => true,
+			'search'                  => false,
+			'sorting'                 => false,
+			'filter'                  => false,
+			'default'                 => 'sslin.de',
+			'eval'                    => array
+			(
+				'mandatory'           => false,
+				'tl_class'            => 'w50'
+			),
+			'sql'                     => "varchar(64) NOT NULL default 'sslin.de'"
+		),
+		'imap_port' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_mailkonten']['imap_port'],
+			'inputType'               => 'text',
+			'exclude'                 => true,
+			'search'                  => false,
+			'sorting'                 => false,
+			'filter'                  => false,
+			'default'                 => 993,
+			'eval'                    => array
+			(
+				'mandatory'           => false,
+				'tl_class'            => 'w50'
+			),
+			'sql'                     => "int(5) unsigned NOT NULL default '993'"
+		),
+		'backup' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_mailkonten']['backup'],
+			'inputType'               => 'checkbox',
+			'exclude'                 => true,
+			'default'                 => false,
+			'filter'                  => true,
+			'eval'                    => array
+			(
+				'tl_class'            => 'w50 m12',
+				'isBoolean'           => true
+			),
+			'sql'                     => "char(1) NOT NULL default ''"
+		),
+		'checkup' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_mailkonten']['checkup'],
+			'inputType'               => 'checkbox',
+			'exclude'                 => true,
+			'default'                 => false,
+			'filter'                  => true,
+			'eval'                    => array
+			(
+				'tl_class'            => 'w50 m12',
 				'isBoolean'           => true
 			),
 			'sql'                     => "char(1) NOT NULL default ''"
