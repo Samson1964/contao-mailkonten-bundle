@@ -1,5 +1,10 @@
 # Mailkonten Changelog
 
+## Version 1.5.1 (2024-07-20)
+
+* Change: Klasse email_check ausgebaut
+* Add: tl_settings.mailkonten_admin
+
 ## Version 1.5.0 (2024-07-11)
 
 * Add: tl_mailkonten neue Felder smtp_server,smtp_port,pop3_server,pop3_port,imap_server,imap_port für den Zugriff auf die Konten
