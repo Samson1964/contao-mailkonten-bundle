@@ -13,7 +13,8 @@
         "php": "^5.6 || ^7.0 || ^8.0",
         "contao/core-bundle": "^4",
         "codefog/contao-haste": "*",
-        "menatwork/contao-multicolumnwizard-bundle": "*"
+        "menatwork/contao-multicolumnwizard-bundle": "*",
+        "phpmailer/phpmailer": "*"
     },
     "conflict": {
         "contao/core": "*",

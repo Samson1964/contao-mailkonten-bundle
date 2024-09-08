@@ -1,5 +1,10 @@
 # Mailkonten Changelog
 
+## Version 1.5.2 (2024-09-08)
+
+* Add: tl_settings ausgebaut
+* Add: "phpmailer/phpmailer": "*" in composer.json
+
 ## Version 1.5.1 (2024-07-20)
 
 * Change: Klasse email_check ausgebaut
