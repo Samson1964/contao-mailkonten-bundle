@@ -1,5 +1,9 @@
 # Mailkonten Changelog
 
+## Version 1.5.4 (2025-01-04)
+
+* Fix: date(): Argument #2 ($timestamp) must be of type ?int, string given in /src/Resources/contao/dca/tl_mailkonten.php (line 800)
+
 ## Version 1.5.3 (2025-01-04)
 
 * Change: Klasse email_check -> Abfrage der E-Mail-Konten alphabetisch aufwärts

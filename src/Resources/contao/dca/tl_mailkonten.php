@@ -797,7 +797,7 @@ class tl_mailkonten extends \Backend
 	 */
 	public function loadDate($value)
 	{
-		if($value) return strtotime(date('Y-m-d', $value) . ' 00:00:00');
+		if($value) return strtotime(date('Y-m-d', (int)$value) . ' 00:00:00');
 		return 0;
 	}
 
