@@ -376,6 +376,10 @@ $GLOBALS['TL_DCA']['tl_mailkonten'] = array
 			),
 			'sql'                     => "char(1) NOT NULL default ''"
 		),
+		'backup_date' => array
+		(
+			'sql'                     => "int(10) unsigned NOT NULL default '0'",
+		),
 		'checkup' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_mailkonten']['checkup'],
@@ -389,6 +393,14 @@ $GLOBALS['TL_DCA']['tl_mailkonten'] = array
 				'isBoolean'           => true
 			),
 			'sql'                     => "char(1) NOT NULL default ''"
+		),
+		'checkup_date' => array
+		(
+			'sql'                     => "int(10) unsigned NOT NULL default '0'",
+		),
+		'ping_date' => array
+		(
+			'sql'                     => "int(10) unsigned NOT NULL default '0'",
 		),
 		'alias' => array
 		(
@@ -786,7 +798,7 @@ class tl_mailkonten extends \Backend
 	public function loadDate($value)
 	{
 		if($value) return strtotime(date('Y-m-d', $value) . ' 00:00:00');
-		return '';
+		return 0;
 	}
 
 	/**

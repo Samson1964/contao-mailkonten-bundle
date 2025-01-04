@@ -1,5 +1,12 @@
 # Mailkonten Changelog
 
+## Version 1.5.3 (2025-01-04)
+
+* Change: Klasse email_check -> Abfrage der E-Mail-Konten alphabetisch aufwärts
+* Add: tl_mailkonten.checkup_date und backup_date, um den letzten Zugriff auf diese Funktionen zu dokumentieren
+* Add: tl_mailkonten.ping_date, um das letzte Versenden der Ping-Mail zu dokumentieren
+* Fix: date(): Argument #2 ($timestamp) must be of type ?int, string given in /src/Resources/contao/dca/tl_mailkonten.php (line 788)
+
 ## Version 1.5.2 (2024-09-08)
 
 * Add: tl_settings ausgebaut

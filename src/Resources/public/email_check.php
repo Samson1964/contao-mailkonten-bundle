@@ -30,7 +30,7 @@ class email_check
 	public function run()
 	{
 
-		$records = \Database::getInstance()->prepare('SELECT * FROM tl_mailkonten WHERE published=?')
+		$records = \Database::getInstance()->prepare('SELECT * FROM tl_mailkonten WHERE published=? ORDER BY email ASC')
 		                                   ->execute(1);
 
 		$content = '';
@@ -72,7 +72,29 @@ class email_check
 					//	$bodies[] = $imap->getEmailBody($email->uid);
 					//}
 					$imap->close();
-
+					
+					// Ping-Mail versenden
+					$mail = new \PHPMailer\PHPMailer\PHPMailer(true);
+					$mail->isSMTP();
+					$mail->SMTPAuth = true;
+					// Persönliche Angaben
+					$mail->Host = $records->smtp_server;
+					$mail->Port = $records->smtp_port;
+					$mail->Username = $records->email;
+					$mail->Password = $records->passwort;
+					$mail->SMTPSecure = \PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_STARTTLS;
+					// Absender
+					$mail->setFrom('webmaster@schachbund.de', 'Frank Hoppe');
+					// Empfänger, optional kann der Name mit angegeben werden
+					$mail->addAddress('webmaster@schachbund.de', 'Frank Hoppe');
+					$mail->isHTML(true);
+					// Betreff
+					$mail->Subject = 'Ping-Mail';
+					// HTML-Inhalt
+					$mail->Body = 'Automatische Ping-Mail, um eine Kontolöschung zu verhindern.';
+					$mail->CharSet = 'UTF-8';
+					$mail->Encoding = 'base64';
+					$mail->send();
 					//print_r($bodies);
 				}
 			}
