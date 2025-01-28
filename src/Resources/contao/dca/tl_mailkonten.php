@@ -42,7 +42,7 @@ $GLOBALS['TL_DCA']['tl_mailkonten'] = array
 		),
 		'label' => array
 		(
-			'fields'                  => array('email', 'pop3', 'forward', 'alias', 'mailinglist', 'info', 'tstamp'),
+			'fields'                  => array('email', 'pop3', 'forward', 'info', 'inhaber'),
 			'showColumns'             => true,
 			'label_callback'          => array('tl_mailkonten','getRecord')
 		),
@@ -110,7 +110,7 @@ $GLOBALS['TL_DCA']['tl_mailkonten'] = array
 	'palettes' => array
 	(
 		'__selector__'                => array('pop3', 'forward', 'alias', 'mailinglist'),
-		'default'                     => '{mail_legend},email,info;{pop3_legend},pop3;{forward_legend},forward;{alias_legend:hide},alias;{responder_legend:hide},auto_responder;{mailingliste_legend},mailinglist;{history_legend:hide},history;{info_legend:hide},anmerkungen;{publish_legend},published'
+		'default'                     => '{mail_legend},email,info;{pop3_legend},pop3;{forward_legend},forward;{alias_legend:hide},alias;{responder_legend:hide},auto_responder;{mailingliste_legend},mailinglist;{history_legend:hide},history;{info_legend:hide},anmerkungen;{publish_legend},published,deleted'
 	),
 
 	// Subpalettes
@@ -768,6 +768,20 @@ $GLOBALS['TL_DCA']['tl_mailkonten'] = array
 			),
 			'sql'                     => "char(1) NOT NULL default ''"
 		),
+		'deleted' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_mailkonten']['deleted'],
+			'inputType'               => 'checkbox',
+			'exclude'                 => true,
+			'default'                 => false,
+			'filter'                  => true,
+			'eval'                    => array
+			(
+				'tl_class'            => 'w50',
+				'isBoolean'           => true
+			),
+			'sql'                     => "char(1) NOT NULL default '1'"
+		),
 		'published' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_mailkonten']['published'],
@@ -798,7 +812,7 @@ class tl_mailkonten extends \Backend
 	public function loadDate($value)
 	{
 		if($value) return strtotime(date('Y-m-d', (int)$value) . ' 00:00:00');
-		return 0;
+		return '';
 	}
 
 	/**

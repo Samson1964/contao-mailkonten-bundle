@@ -1,5 +1,11 @@
 # Mailkonten Changelog
 
+## Version 1.5.5 (2025-01-28)
+
+* Fix: tl_mailkonten Funktion loadDate gibt immer 01.01.1970 zurück -> Rückgabe bei 0 auf '' statt 0 geändert
+* Add: tl_mailkonten.deleted -> Löschmarkierung
+* Change: Auflistung Datensätze -> alias, mailinglist, tstamp entfernt, inhaber hinzugefügt
+
 ## Version 1.5.4 (2025-01-04)
 
 * Fix: date(): Argument #2 ($timestamp) must be of type ?int, string given in /src/Resources/contao/dca/tl_mailkonten.php (line 800)

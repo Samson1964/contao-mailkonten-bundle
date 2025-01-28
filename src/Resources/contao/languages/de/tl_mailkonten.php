@@ -87,6 +87,7 @@ $GLOBALS['TL_LANG']['tl_mailkonten']['anmerkungen'] = array('Anmerkungen', 'Anme
 
 $GLOBALS['TL_LANG']['tl_mailkonten']['publish_legend'] = 'Aktivierung';
 $GLOBALS['TL_LANG']['tl_mailkonten']['published'] = array('Aktiv', 'E-Mail-Konto aktiv (nicht gelöscht)');
+$GLOBALS['TL_LANG']['tl_mailkonten']['deleted'] = array('Gelöscht', 'Das E-Mail-Konto wurde gelöscht');
 
 $GLOBALS['TL_LANG']['tl_mailkonten']['art_options'] = array
 (
