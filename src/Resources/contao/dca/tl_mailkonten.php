@@ -98,6 +98,12 @@ $GLOBALS['TL_DCA']['tl_mailkonten'] = array
 					),
 				),
 			),
+			'tree' => array
+			(
+				'label'               => &$GLOBALS['TL_LANG']['tl_mailkonten']['tree'],
+				'href'                => 'key=tree',
+				'icon'                => 'bundles/contaomailkonten/images/tree.png',
+			),
 			'show' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_mailkonten']['show'],

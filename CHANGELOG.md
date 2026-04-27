@@ -1,5 +1,9 @@
 # Mailkonten Changelog
 
+## Version 1.6.0 (2026-04-27)
+
+* Add: Ausgabe von Konten als Baumstruktur (inkl. verlinkter Konten über Weiterleitungen) -> Ausgabe bis Ebene 5
+
 ## Version 1.5.5 (2025-01-28)
 
 * Fix: tl_mailkonten Funktion loadDate gibt immer 01.01.1970 zurück -> Rückgabe bei 0 auf '' statt 0 geändert

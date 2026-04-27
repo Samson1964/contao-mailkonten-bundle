@@ -15,5 +15,6 @@ $GLOBALS['BE_MOD']['content']['mailkonten'] = array
 (
 	'tables'         => array('tl_mailkonten'),
 	'export'         => array('Schachbulle\ContaoMailkontenBundle\Classes\Export', 'exportText'),
+	'tree'           => array('Schachbulle\ContaoMailkontenBundle\Classes\Tree', 'exportKonto'),
 	'icon'           => 'bundles/contaomailkonten/images/icon.png'
 );

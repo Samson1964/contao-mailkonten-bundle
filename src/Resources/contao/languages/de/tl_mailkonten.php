@@ -16,6 +16,7 @@ $GLOBALS['TL_LANG']['tl_mailkonten']['edit'] = array('E-Mail-Konto ID %s bearbei
 $GLOBALS['TL_LANG']['tl_mailkonten']['copy'] = array('E-Mail-Konto ID %s kopieren', 'E-Mail-Konto ID %s kopieren');
 $GLOBALS['TL_LANG']['tl_mailkonten']['delete'] = array('E-Mail-Konto ID %s löschen', 'E-Mail-Konto ID %s löschen');
 $GLOBALS['TL_LANG']['tl_mailkonten']['toggle'] = array('E-Mail-Konto ID %s aktivieren/deaktivieren', 'E-Mail-Konto ID %s aktivieren/deaktivieren');
+$GLOBALS['TL_LANG']['tl_mailkonten']['tree'] = array('E-Mail-Konto ID %s exportieren', 'E-Mail-Konto ID %s in eine Baumstruktur exportieren. Alle Weiterleitungen werden ebenfalls geprüft und exportiert.');
 $GLOBALS['TL_LANG']['tl_mailkonten']['show'] = array('Details zum E-Mail-Konto ID %s anzeigen', 'Details zum E-Mail-Konto ID %s anzeigen');
 
 // Globale Funktionen
