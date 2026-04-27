@@ -44,7 +44,9 @@ class Tree extends \Backend
 			fputs($fp, str_repeat('=', (7 + strlen($objKonto->email)))."\r\n");
 			
 			// Weiterleitungen im aktuellen Konto auslesen
-			$weiterleitungen = (array)unserialize($objKonto->forwarder);
+			if($objKonto->forward) $weiterleitungen = (array)unserialize($objKonto->forwarder);
+			else $weiterleitungen = array();
+			
 			foreach($weiterleitungen as $weiterleitung)
 			{
 				fputs($fp, '├─ '.$weiterleitung['forwarder_email']."\r\n");
@@ -79,38 +81,20 @@ class Tree extends \Backend
 
 	public function LadeWeiterleitungen($adresse)
 	{
-		$objKonto = \Database::getInstance()->prepare('SELECT * FROM tl_mailkonten WHERE email = ? AND published = ?')
-		                                    ->execute($adresse, '1');
-		$weiterleitungen = (array)unserialize($objKonto->forwarder);
 		$arr = array();
-		foreach($weiterleitungen as $weiterleitung)
-		{
-			if(isset($weiterleitung['forwarder_email'])) $arr[] = $weiterleitung['forwarder_email'];
-		}
-		return $arr;
-	}
-	
-	public function Weiterleitung($adresse, $ebene, $fp)
-	{
-		static $ebene;
-		// Untergeordnetes Mailkonto vorhanden?
-		$objKonto = \Database::getInstance()->prepare('SELECT * FROM tl_mailkonten WHERE email = ? AND published = ?')
-		                                    ->execute($adresse, '1');
 
-		$weiterleitungen = (array)unserialize($objKonto->forwarder);
-
-		if(count($weiterleitungen) > 0)
+		$objKonto = \Database::getInstance()->prepare('SELECT * FROM tl_mailkonten WHERE email = ? AND forward = ? AND published = ?')
+		                                    ->execute($adresse, '1', '1');
+		if($objKonto->numRows)
 		{
+			$weiterleitungen = (array)unserialize($objKonto->forwarder);
 			foreach($weiterleitungen as $weiterleitung)
 			{
-				if(isset($weiterleitung['forwarder_email']))
-				{
-					fputs($fp, $ebene.' - '.str_repeat('│ ', $ebene).'├─ '.$weiterleitung['forwarder_email']."\r\n");
-					self::Weiterleitung($weiterleitung['forwarder_email'], $ebene++, $fp); // Weiterleitungen auf nächster Ebene suchen
-				}
+				if(isset($weiterleitung['forwarder_email'])) $arr[] = $weiterleitung['forwarder_email'];
 			}
 		}
 
-		$ebene--;
+		return $arr;
 	}
+	
 }

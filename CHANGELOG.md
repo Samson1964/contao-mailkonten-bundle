@@ -1,5 +1,9 @@
 # Mailkonten Changelog
 
+## Version 1.6.1 (2026-04-27)
+
+* Fix: Baum-Export von Weiterleitungen -> abgeschaltete Weiterleitungsfunktion wurde nicht beachtet
+
 ## Version 1.6.0 (2026-04-27)
 
 * Add: Ausgabe von Konten als Baumstruktur (inkl. verlinkter Konten über Weiterleitungen) -> Ausgabe bis Ebene 5
