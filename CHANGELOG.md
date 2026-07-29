@@ -1,5 +1,9 @@
 # Mailkonten Changelog
 
+## Version 1.6.2 (2026-07-29)
+
+* Fix: Warning: Undefined array key "deleteConfirm" bei contao:migrate -> Lesezugriffe auf $GLOBALS['TL_LANG'] in den DCA-Dateien mit `?? null` bzw. `?? array()` abgesichert, da der DcaLoader die Sprachdateien noch nicht geladen hat
+
 ## Version 1.6.1 (2026-04-27)
 
 * Fix: Baum-Export von Weiterleitungen -> abgeschaltete Weiterleitungsfunktion wurde nicht beachtet
