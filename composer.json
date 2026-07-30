@@ -1,7 +1,14 @@
 {
     "name": "schachbulle/contao-mailkonten-bundle",
     "type": "contao-bundle",
-    "description": "Verwaltung von E-Mailkonten für Contao 4",
+    "description": "Verwaltet E-Mail-Konten und ihre Zuordnung zu Funktionen und Personen.",
+    "keywords": [
+        "contao",
+        "email",
+        "konten",
+        "verwaltung"
+    ],
+    "homepage": "https://github.com/Samson1964/contao-mailkonten-bundle",
     "license": "LGPL-3.0-or-later",
     "authors": [
         {
