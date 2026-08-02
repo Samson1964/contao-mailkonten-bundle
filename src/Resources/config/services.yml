@@ -1,9 +1,12 @@
 services:
-    _instanceof:
-        Contao\CoreBundle\Framework\FrameworkAwareInterface:
-            calls:
-                - ["setFramework", ["@contao.framework"]]
-
-        Symfony\Component\DependencyInjection\ContainerAwareInterface:
-            calls:
-                - ["setContainer", ["@service_container"]]
+    # Stündliche Prüfung der E-Mail-Konten (Anzahl der E-Mails, Speicherbelegung,
+    # Ping-Mail gegen die automatische Kontolöschung).
+    #
+    # Hinweis: Hier stand früher ein _instanceof-Block für FrameworkAwareInterface
+    # und ContainerAwareInterface. Keine Klasse dieser Erweiterung setzt die
+    # beiden um, und ContainerAwareInterface gibt es seit Symfony 7 nicht mehr —
+    # der Block verhinderte damit den Containerbau unter Contao 5.
+    Schachbulle\ContaoMailkontenBundle\Cron\Kontenpruefung:
+        public: true
+        tags:
+            - { name: contao.cronjob, interval: hourly }

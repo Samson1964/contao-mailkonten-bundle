@@ -1,16 +1,15 @@
-<?php 
+<?php
 
 /**
- * Contao Open Source CMS
- * Copyright (C) 2005-2014 Leo Feyer
+ * Mailkonten für Contao Open Source CMS
  *
+ * @author    Frank Hoppe
+ * @license   LGPL-3.0-or-later
  */
 
 /**
- * Backend-Modul Übersetzungen
+ * Standardfunktionen
  */
-
-// Standardfunktionen
 $GLOBALS['TL_LANG']['tl_mailkonten']['new'] = array('Neues E-Mail-Konto', 'Neues E-Mail-Konto');
 $GLOBALS['TL_LANG']['tl_mailkonten']['edit'] = array('E-Mail-Konto ID %s bearbeiten', 'E-Mail-Konto ID %s bearbeiten');
 $GLOBALS['TL_LANG']['tl_mailkonten']['copy'] = array('E-Mail-Konto ID %s kopieren', 'E-Mail-Konto ID %s kopieren');
@@ -19,10 +18,14 @@ $GLOBALS['TL_LANG']['tl_mailkonten']['toggle'] = array('E-Mail-Konto ID %s aktiv
 $GLOBALS['TL_LANG']['tl_mailkonten']['tree'] = array('E-Mail-Konto ID %s exportieren', 'E-Mail-Konto ID %s in eine Baumstruktur exportieren. Alle Weiterleitungen werden ebenfalls geprüft und exportiert.');
 $GLOBALS['TL_LANG']['tl_mailkonten']['show'] = array('Details zum E-Mail-Konto ID %s anzeigen', 'Details zum E-Mail-Konto ID %s anzeigen');
 
-// Globale Funktionen
+/**
+ * Globale Funktionen
+ */
 $GLOBALS['TL_LANG']['tl_mailkonten']['export'] = array('Export', 'Export der angezeigten E-Mail-Konten in eine Textdatei');
 
-// Formularfelder
+/**
+ * Formularfelder
+ */
 $GLOBALS['TL_LANG']['tl_mailkonten']['tstamp'] = array('Aktualisiert', 'Aktualisierungsdatum');
 
 $GLOBALS['TL_LANG']['tl_mailkonten']['mail_legend'] = 'E-Mail-Konto';
@@ -31,21 +34,20 @@ $GLOBALS['TL_LANG']['tl_mailkonten']['info'] = array('Info', 'Kurze Information 
 
 $GLOBALS['TL_LANG']['tl_mailkonten']['pop3_legend'] = 'POP3/IMAP';
 $GLOBALS['TL_LANG']['tl_mailkonten']['pop3'] = array('POP3/IMAP', 'POP3/IMAP aktivieren');
-$GLOBALS['TL_LANG']['tl_mailkonten']['inhaber'] = array('Besitzer', 'Name des Kontobesitzeers/Inhabers');
+$GLOBALS['TL_LANG']['tl_mailkonten']['inhaber'] = array('Besitzer', 'Name des Kontoinhabers');
 $GLOBALS['TL_LANG']['tl_mailkonten']['mailbox_groesse'] = array('Größe', 'Größe des Postfachs in MB');
-$GLOBALS['TL_LANG']['tl_mailkonten']['art'] = array('Art', 'Art des Postfachs');
 $GLOBALS['TL_LANG']['tl_mailkonten']['spam'] = array('Spam', 'Was wird mit Spam gemacht?');
 $GLOBALS['TL_LANG']['tl_mailkonten']['leerung'] = array('Leerung', 'Leerung vom Inhaber des Postfachs');
 $GLOBALS['TL_LANG']['tl_mailkonten']['auslastung'] = array('Auslastung', 'Auslastung des Postfachs');
-$GLOBALS['TL_LANG']['tl_mailkonten']['passwort'] = array('Passwort', 'Passwort des Postfaches');
+$GLOBALS['TL_LANG']['tl_mailkonten']['passwort'] = array('Passwort', 'Passwort des Postfaches. Wird für Checkup und Ping-Mail benötigt.');
 $GLOBALS['TL_LANG']['tl_mailkonten']['pop3_server'] = array('POP3-Server', 'POP3-Server');
 $GLOBALS['TL_LANG']['tl_mailkonten']['pop3_port'] = array('Port für SSL-Abruf bei POP3-Nutzung', 'Port für SSL-Abruf bei POP3-Nutzung');
 $GLOBALS['TL_LANG']['tl_mailkonten']['smtp_server'] = array('SMTP-Server', 'Servername für SSL-Versand');
-$GLOBALS['TL_LANG']['tl_mailkonten']['smtp_port'] = array('Port für SSL-Versand', 'Port für SSL-Versand');
+$GLOBALS['TL_LANG']['tl_mailkonten']['smtp_port'] = array('Port für SSL-Versand', 'Port für SSL-Versand. Bei 465 wird sofort verschlüsselt, sonst über STARTTLS.');
 $GLOBALS['TL_LANG']['tl_mailkonten']['imap_server'] = array('IMAP-Server', 'IMAP-Server');
 $GLOBALS['TL_LANG']['tl_mailkonten']['imap_port'] = array('Port für SSL-Abruf bei IMAP-Nutzung', 'Port für SSL-Abruf bei IMAP-Nutzung');
-$GLOBALS['TL_LANG']['tl_mailkonten']['backup'] = array('Backup', 'Backup erstellen. Dazu muß ein Cronjob erstellt werden.');
-$GLOBALS['TL_LANG']['tl_mailkonten']['checkup'] = array('Checkup', 'Kontozugriff simulieren. Dazu muß ein Cronjob erstellt werden.');
+$GLOBALS['TL_LANG']['tl_mailkonten']['backup'] = array('Backup', 'Backup erstellen. Diese Funktion ist noch nicht umgesetzt.');
+$GLOBALS['TL_LANG']['tl_mailkonten']['checkup'] = array('Checkup', 'Postfach täglich prüfen und monatlich eine Ping-Mail verschicken. Dazu muss der Cronjob unter System -> Einstellungen eingeschaltet sein.');
 
 $GLOBALS['TL_LANG']['tl_mailkonten']['forward_legend'] = 'Weiterleitungen';
 $GLOBALS['TL_LANG']['tl_mailkonten']['forward'] = array('Weiterleitung', 'Weiterleitung aktivieren');
@@ -70,7 +72,7 @@ $GLOBALS['TL_LANG']['tl_mailkonten']['auto_responder'] = array('Auto-Responder',
 $GLOBALS['TL_LANG']['tl_mailkonten']['mailingliste_legend'] = 'Mailingliste';
 $GLOBALS['TL_LANG']['tl_mailkonten']['mailinglist'] = array('Mailingliste', 'Mailingliste aktivieren');
 $GLOBALS['TL_LANG']['tl_mailkonten']['url'] = array('Listenverwaltung', 'Link zur Listenverwaltung');
-$GLOBALS['TL_LANG']['tl_mailkonten']['urlLinked'] = array('', '');
+$GLOBALS['TL_LANG']['tl_mailkonten']['urlLinked'] = array('Listenverwaltung', 'Öffnet die Listenverwaltung in einem neuen Fenster.');
 $GLOBALS['TL_LANG']['tl_mailkonten']['mlPasswort'] = array('Passwort', 'Passwort der Listenadministration');
 $GLOBALS['TL_LANG']['tl_mailkonten']['mailingliste'] = array('Adressen', '');
 $GLOBALS['TL_LANG']['tl_mailkonten']['mailingliste_email'] = array('E-Mail', '');
@@ -90,15 +92,19 @@ $GLOBALS['TL_LANG']['tl_mailkonten']['publish_legend'] = 'Aktivierung';
 $GLOBALS['TL_LANG']['tl_mailkonten']['published'] = array('Aktiv', 'E-Mail-Konto aktiv (nicht gelöscht)');
 $GLOBALS['TL_LANG']['tl_mailkonten']['deleted'] = array('Gelöscht', 'Das E-Mail-Konto wurde gelöscht');
 
-$GLOBALS['TL_LANG']['tl_mailkonten']['art_options'] = array
+/**
+ * Optionen
+ *
+ * Die Spam-Optionen standen früher in default.php. Sie gehören zu dieser
+ * Tabelle und werden deshalb hier gepflegt — auch der Textexport greift beim
+ * Auflösen der Nummer darauf zu.
+ */
+$GLOBALS['TL_LANG']['tl_mailkonten']['spam_options'] = array
 (
-	'1' => 'POP3',
-	'2' => 'Exchange',
-	'3' => 'Weiterleitung',
-	'4' => 'POP3/Weiterleitung',
-	'5' => 'Mailingliste',
-	'7' => 'Weiterleitung/Mailingliste',
-	'6' => 'IMAP',
+	'1' => 'Zustellen',
+	'2' => 'Markieren',
+	'3' => 'Löschen',
+	'4' => 'Ablehnen',
 );
 
 $GLOBALS['TL_LANG']['tl_mailkonten']['auslastung_options'] = array

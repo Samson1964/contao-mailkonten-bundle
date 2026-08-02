@@ -1,2 +1,10 @@
 *.sql
-*.xml
+
+# Composer
+/composer.lock
+/vendor/
+
+# PhpUnit
+/phpunit.xml
+/.phpunit.cache/
+/.phpunit.result.cache

@@ -1,163 +1,305 @@
 <?php
 
-namespace Schachbulle\ContaoMailkontenBundle\Classes;
+declare(strict_types=1);
 
 /**
- * Class dsb_trainerlizenzExport
-  */
-class Export extends \Backend
+ * Mailkonten für Contao Open Source CMS
+ *
+ * @author    Frank Hoppe
+ * @license   LGPL-3.0-or-later
+ */
+
+namespace Schachbulle\ContaoMailkontenBundle\Classes;
+
+use Contao\Controller;
+use Contao\CoreBundle\Exception\ResponseException;
+use Contao\Database;
+use Contao\DataContainer;
+use Contao\Input;
+use Contao\StringUtil;
+use Contao\System;
+use Symfony\Component\HttpFoundation\Response;
+
+/**
+ * Export aller angezeigten E-Mail-Konten in eine Textdatei.
+ *
+ * Die Klasse hängt als Modulschlüssel „export“ am Backend-Modul (siehe
+ * Resources/contao/config/config.php). Contao ruft exportText() auf, sobald im
+ * Backend der Knopf „Export“ gedrückt wird.
+ *
+ * Exportiert wird genau das, was die Liste gerade zeigt: Suche und Filter der
+ * laufenden Backend-Sitzung werden übernommen, die Seitenaufteilung dagegen
+ * nicht — eine Textdatei mit nur 30 von 300 Konten wäre nutzlos.
+ */
+final class Export
 {
-
 	/**
-	 * Funktion exportTrainer_XLS
-	 * @param object
-	 * @return string
+	 * Baut die Textdatei und schickt sie als Download an den Browser.
+	 *
+	 * Der Download wird als Ausnahme geworfen statt mit `exit` erzwungen.
+	 * Contao fängt die ResponseException ab und liefert die Antwort unverändert
+	 * aus. Der frühere Weg über `exit` hing davon ab, dass kein Ausgabepuffer
+	 * dazwischenstand — genau daher stammte der HTML-Rest am Dateiende, der in
+	 * Fassung 1.3.1 als Fehler auftauchte.
+	 *
+	 * @param DataContainer $dc Data Container der Liste; liefert den
+	 *                          Tabellennamen für Suche und Filter
+	 *
+	 * @return string Immer der leere String. Der eigentliche Rückgabeweg ist
+	 *                die geworfene Ausnahme; der leere String greift nur, wenn
+	 *                die Methode ohne den Schlüssel „export“ aufgerufen wurde
+	 *
+	 * @throws ResponseException Trägt die fertige Textdatei als Download
 	 */
-
-	public function exportText(\DataContainer $dc)
+	public function exportText(DataContainer $dc): string
 	{
-		if ($this->Input->get('key') != 'export')
+		if ('export' !== Input::get('key'))
 		{
 			return '';
 		}
 
-		$arrExport = self::getRecords($dc); // Lizenzen auslesen
-
+		$inhalt = self::formatiere(self::ladeKonten($dc->table));
 		$dateiname = 'Mailkonten_'.date('Ymd-His').'.txt';
 
-		//// Redirect output to a client’s web browser (Xls)
-		header('Content-Type: text/plain');
-		header('Content-Disposition: attachment;filename="'.$dateiname.'"');
-		header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-		header('Pragma: public');
-		header('Expires: 0');
+		$response = new Response($inhalt);
+		$response->headers->set('Content-Type', 'text/plain; charset=utf-8');
+		$response->headers->set('Content-Disposition', 'attachment; filename="'.$dateiname.'"');
+		$response->headers->set('Cache-Control', 'must-revalidate, post-check=0, pre-check=0');
+		$response->headers->set('Pragma', 'public');
+		$response->headers->set('Expires', '0');
 
-		// Daten schreiben
-		// Dateihandle für Direktstream öffnen
-		$fp = fopen("php://output",'w');
-
-		foreach($arrExport as $item)
-		{
-			fputs($fp,'Konto: '.$item['email'].' (Letzte Änderung: '.$item['tstamp'].")\r\n");
-			fputs($fp,'    Info: '.$item['info']."\r\n");
-			if($item['pop3'])
-			{
-				fputs($fp,'    POP3/IMAP: Ja'."\r\n");
-				fputs($fp,'        Inhaber: '.$item['inhaber']."\r\n");
-				//fputs($fp,'        Passwort: '.$item['passwort']."\r\n");
-				fputs($fp,'        Mailbox-Größe: '.$item['mailbox_groesse'].' MB ('.$item['auslastung'].'% belegt)'."\r\n");
-				fputs($fp,'        Spam-Filter: '.$item['spam']."\r\n");
-				fputs($fp,'        Leerung: '.$item['leerung']."\r\n");
-			}
-			if($item['forward'])
-			{
-				fputs($fp,'    Weiterleitungen: Ja'."\r\n");
-				$arr = unserialize($item['forwarder']);
-				foreach($arr as $data)
-				{
-					fputs($fp,'        Adresse: '.$data['forwarder_email']."\r\n");
-				}
-			}
-			if($item['alias'])
-			{
-				fputs($fp,'    Aliasse: Ja'."\r\n");
-				$arr = unserialize($item['aliase']);
-				foreach($arr as $data)
-				{
-					fputs($fp,'        Adresse: '.$data['aliase_email']."\r\n");
-				}
-			}
-			if($item['mailinglist'])
-			{
-				fputs($fp,'    Mailingliste: Ja'."\r\n");
-			}
-			fputs($fp,"\r\n");
-		}
-		fclose($fp);
-		exit;
-
+		throw new ResponseException($response);
 	}
 
-	public function getRecords(\DataContainer $dc)
+	/**
+	 * Liest die Konten aus der Datenbank, eingeschränkt wie die Backend-Liste.
+	 *
+	 * Suchbegriff und Filter stehen in der Backend-Sitzung. Contao legt sie im
+	 * Sitzungsbehälter „contao_backend“ ab; die frühere Fassung griff über
+	 * `$dc->Session` darauf zu, was es seit Contao 4 nicht mehr gibt und unter
+	 * PHP 8 mit einem Fehler abbrach.
+	 *
+	 * **Sicherheit:** Feldnamen aus der Sitzung werden gegen die DCA-Felder
+	 * geprüft und maskiert, Werte grundsätzlich gebunden. Vorher wanderten
+	 * beide unverändert in den SQL-Text — wer den Filter der Backend-Adresszeile
+	 * manipulierte, konnte damit beliebiges SQL einschleusen.
+	 *
+	 * @param string $tabelle Tabellenname, üblicherweise „tl_mailkonten“
+	 *
+	 * @return array Liste der Konten als assoziative Arrays, sortiert nach
+	 *               E-Mail-Adresse; leer, wenn kein Konto passt
+	 */
+	public static function ladeKonten(string $tabelle): array
 	{
-		// Liest die Datensätze der Lizenzverwaltung in ein Array
+		Controller::loadDataContainer($tabelle);
 
-		// Suchbegriff in aktueller Ansicht laden
-		$search = $dc->Session->get('search');
-		$search = $search[$dc->table]; // Das Array enthält field und value
-		//if($search['field']) $sql = " WHERE ".$search['field']." LIKE '%%".$search['value']."%%'"; // findet auch Umlaute, Suche nach "ba" findet auch "bä"
-		if($search['field'] && $search['value']) $sql = " WHERE LOWER(CAST(".$search['field']." AS CHAR)) REGEXP LOWER('".$search['value']."')"; // Contao-Standard, ohne Umlaute, Suche nach "ba" findet nicht "bä"
-		else $sql = '';
+		$bedingungen = array();
+		$werte = array();
 
-		// Filter in aktueller Ansicht laden. Beispiel mit Spezialfilter (tli_filter):
-		//
-		// [filter] => Array
-		//       (
-		//           [tl_lizenzverwaltungFilter] => Array
-		//               (
-		//                   [tli_filter] => V2
-		//               )
-		// 
-		//           [tl_lizenzverwaltung] => Array
-		//               (
-		//                   [limit] => 0,30
-		//                   [geschlecht] => w
-		//               )
-		// 
-		//       )
-		$filter = $dc->Session->get('filter');
-		$filter = $filter[$dc->table]; // Das Array enthält limit (Wert meistens = 0,30) und alle Feldnamen mit den Werten
-		foreach($filter as $key => $value)
+		// Suchbegriff der laufenden Ansicht übernehmen
+		$suche = self::sitzungswert('search', $tabelle);
+
+		if (!empty($suche['field']) && isset($suche['value']) && '' !== (string) $suche['value'])
 		{
-			if($key != 'limit')
+			$feld = self::pruefeFeld($tabelle, (string) $suche['field']);
+
+			if (null !== $feld)
 			{
-				($sql) ? $sql .= ' AND' : $sql = ' WHERE';
-				$sql .= " ".$key." = '".$value."'";
+				$bedingungen[] = 'CAST('.$feld.' AS CHAR) REGEXP ?';
+				$werte[] = self::pruefeRegexp((string) $suche['value']);
 			}
 		}
 
-		$sql = "SELECT * FROM tl_mailkonten".$sql.' ORDER BY email ASC';
-		//echo $sql."\r\n\r\n";
-		//log_message('Excel-Export mit: '.$sql, 'lizenzverwaltung.log');
-		// Datensätze laden
-		$records = \Database::getInstance()->prepare($sql)
-		                                   ->execute();
-
-		// Datensätze umwandeln
-		$arrExport = array();
-		if($records->numRows)
+		// Filter der laufenden Ansicht übernehmen. „limit“ ist die
+		// Seitenaufteilung und wird bewusst übergangen
+		foreach (self::sitzungswert('filter', $tabelle) as $name => $wert)
 		{
-			while($records->next()) 
+			if ('limit' === $name || \is_array($wert))
 			{
-				$arrExport[] = array
-				(
-					'tstamp'          => date('d.m.Y H:i',$records->tstamp),
-					'email'           => $records->email,
-					'info'            => $records->info,
-					'pop3'            => $records->pop3,
-					'inhaber'         => $records->inhaber,
-					'passwort'        => $records->passwort,
-					'mailbox_groesse' => $records->mailbox_groesse,
-					'auslastung'      => $records->auslastung,
-					'spam'            => $GLOBALS['TL_LANG']['tl_mailkonten']['spam_options'][$records->spam],
-					'leerung'         => $records->leerung,
-					'forward'         => $records->forward,
-					'forwarder'       => $records->forwarder,
-					'alias'           => $records->alias,
-					'aliase'          => $records->aliase,
-					'auto_responder'  => $records->auto_responder,
-					'alias'           => $records->alias,
-					'mailinglist'     => $records->mailinglist,
-					'url'             => $records->url,
-					'mlPasswort'      => $records->mlPasswort,
-					'mailingliste'    => $records->mailingliste,
-					'history'         => $records->history,
-					'anmerkungen'     => $records->anmerkungen,
-					'published'       => $records->published,
-				);
+				continue;
+			}
+
+			$feld = self::pruefeFeld($tabelle, (string) $name);
+
+			if (null !== $feld)
+			{
+				$bedingungen[] = $feld.'=?';
+				$werte[] = $wert;
 			}
 		}
-		return $arrExport;
+
+		$sql = 'SELECT * FROM '.Database::quoteIdentifier($tabelle);
+
+		if ($bedingungen)
+		{
+			$sql .= ' WHERE '.implode(' AND ', $bedingungen);
+		}
+
+		$sql .= ' ORDER BY email ASC';
+
+		$objKonten = Database::getInstance()->prepare($sql)->execute(...$werte);
+
+		$konten = array();
+
+		while ($objKonten->next())
+		{
+			$konten[] = $objKonten->row();
+		}
+
+		return $konten;
 	}
 
+	/**
+	 * Setzt die Konten zu einer Textdatei zusammen.
+	 *
+	 * Bewusst ohne Datenbank- und Sitzungszugriff, damit der Aufbau der Datei
+	 * für sich getestet werden kann.
+	 *
+	 * @param array $konten Datensätze aus ladeKonten()
+	 *
+	 * @return string Fertiger Dateiinhalt mit CRLF als Zeilenende (die Datei
+	 *                landet erfahrungsgemäß im Windows-Editor). Leerer String,
+	 *                wenn keine Konten übergeben wurden
+	 */
+	public static function formatiere(array $konten): string
+	{
+		$zeilen = array();
+
+		foreach ($konten as $konto)
+		{
+			$zeitstempel = (int) ($konto['tstamp'] ?? 0);
+
+			$zeilen[] = 'Konto: '.($konto['email'] ?? '').' (Letzte Änderung: '.($zeitstempel ? date('d.m.Y H:i', $zeitstempel) : 'unbekannt').')';
+			$zeilen[] = '    Info: '.($konto['info'] ?? '');
+
+			if (!empty($konto['pop3']))
+			{
+				$zeilen[] = '    POP3/IMAP: Ja';
+				$zeilen[] = '        Inhaber: '.($konto['inhaber'] ?? '');
+				$zeilen[] = '        Mailbox-Größe: '.($konto['mailbox_groesse'] ?? 0).' MB ('.($konto['auslastung'] ?? 0).'% belegt)';
+				$zeilen[] = '        Spam-Filter: '.self::spamText((string) ($konto['spam'] ?? ''));
+				$zeilen[] = '        Leerung: '.(!empty($konto['leerung']) ? 'Ja' : 'Nein');
+			}
+
+			if (!empty($konto['forward']))
+			{
+				$zeilen[] = '    Weiterleitungen: Ja';
+
+				foreach (StringUtil::deserialize($konto['forwarder'] ?? null, true) as $eintrag)
+				{
+					$zeilen[] = '        Adresse: '.($eintrag['forwarder_email'] ?? '');
+				}
+			}
+
+			if (!empty($konto['alias']))
+			{
+				$zeilen[] = '    Aliasse: Ja';
+
+				foreach (StringUtil::deserialize($konto['aliase'] ?? null, true) as $eintrag)
+				{
+					$zeilen[] = '        Adresse: '.($eintrag['aliase_email'] ?? '');
+				}
+			}
+
+			if (!empty($konto['mailinglist']))
+			{
+				$zeilen[] = '    Mailingliste: Ja';
+
+				if (!empty($konto['url']))
+				{
+					$zeilen[] = '        Listenverwaltung: '.$konto['url'];
+				}
+			}
+
+			$zeilen[] = '';
+		}
+
+		return $zeilen ? implode("\r\n", $zeilen)."\r\n" : '';
+	}
+
+	/**
+	 * Übersetzt den gespeicherten Spam-Schlüssel in seinen Klartext.
+	 *
+	 * @param string $schluessel Wert des Feldes spam, „1“ bis „4“
+	 *
+	 * @return string Bezeichnung aus der Sprachdatei, etwa „Markieren“. Ist der
+	 *                Schlüssel unbekannt oder leer, kommt „-“ zurück
+	 */
+	private static function spamText(string $schluessel): string
+	{
+		if ('' === $schluessel)
+		{
+			return '-';
+		}
+
+		return (string) ($GLOBALS['TL_LANG']['tl_mailkonten']['spam_options'][$schluessel] ?? $schluessel);
+	}
+
+	/**
+	 * Liest einen Eintrag der Backend-Sitzung für eine bestimmte Tabelle.
+	 *
+	 * @param string $schluessel „search“ oder „filter“
+	 * @param string $tabelle    Tabellenname, unter dem Contao die Werte ablegt
+	 *
+	 * @return array Gespeicherte Werte; leeres Array, wenn nichts hinterlegt
+	 *               ist oder gar keine Sitzung läuft (etwa auf der Konsole)
+	 */
+	private static function sitzungswert(string $schluessel, string $tabelle): array
+	{
+		$request = System::getContainer()->get('request_stack')->getCurrentRequest();
+
+		if (null === $request || !$request->hasSession())
+		{
+			return array();
+		}
+
+		$daten = $request->getSession()->getBag('contao_backend')->get($schluessel);
+
+		return \is_array($daten[$tabelle] ?? null) ? $daten[$tabelle] : array();
+	}
+
+	/**
+	 * Prüft einen Feldnamen gegen das DCA und maskiert ihn für SQL.
+	 *
+	 * @param string $tabelle Tabellenname, dessen DCA geladen ist
+	 * @param string $feld    Feldname aus der Sitzung, also aus fremder Hand
+	 *
+	 * @return string|null Maskierter Feldname zur Verwendung im SQL-Text, oder
+	 *                     null wenn die Tabelle kein solches Feld hat
+	 */
+	private static function pruefeFeld(string $tabelle, string $feld): ?string
+	{
+		if (!isset($GLOBALS['TL_DCA'][$tabelle]['fields'][$feld]))
+		{
+			return null;
+		}
+
+		return Database::quoteIdentifier($feld);
+	}
+
+	/**
+	 * Sorgt dafür, dass ein Suchbegriff als regulärer Ausdruck brauchbar ist.
+	 *
+	 * MySQL bricht mit einem Fehler ab, wenn REGEXP ein ungültiges Muster
+	 * bekommt — etwa bei der Suche nach einer einzelnen öffnenden Klammer.
+	 * Contao löst das in der Listenansicht genauso: erst probeweise ausführen,
+	 * bei einem Fehler den Begriff maskieren und damit wörtlich suchen.
+	 *
+	 * @param string $begriff Eingetippter Suchbegriff
+	 *
+	 * @return string Der Begriff selbst oder seine maskierte Fassung
+	 */
+	private static function pruefeRegexp(string $begriff): string
+	{
+		try
+		{
+			Database::getInstance()->prepare("SELECT '' REGEXP ?")->execute($begriff);
+		}
+		catch (\Exception $e)
+		{
+			return preg_quote($begriff);
+		}
+
+		return $begriff;
+	}
 }
