@@ -30,7 +30,7 @@ $GLOBALS['TL_LANG']['tl_mailkonten']['tstamp'] = array('Aktualisiert', 'Aktualis
 
 $GLOBALS['TL_LANG']['tl_mailkonten']['mail_legend'] = 'E-Mail-Konto';
 $GLOBALS['TL_LANG']['tl_mailkonten']['email'] = array('E-Mail', 'E-Mail-Adresse');
-$GLOBALS['TL_LANG']['tl_mailkonten']['info'] = array('Info', 'Kurze Information zum E-Mail-Konto');
+$GLOBALS['TL_LANG']['tl_mailkonten']['info'] = array('Info', 'Information und Anmerkungen zum E-Mail-Konto');
 
 $GLOBALS['TL_LANG']['tl_mailkonten']['pop3_legend'] = 'POP3/IMAP';
 $GLOBALS['TL_LANG']['tl_mailkonten']['pop3'] = array('POP3/IMAP', 'POP3/IMAP aktivieren');
@@ -84,9 +84,6 @@ $GLOBALS['TL_LANG']['tl_mailkonten']['history_legend'] = 'Bearbeitungen';
 $GLOBALS['TL_LANG']['tl_mailkonten']['history'] = array('Bearbeitungsgeschichte', '');
 $GLOBALS['TL_LANG']['tl_mailkonten']['history_date'] = array('Bearbeitungsdatum', '');
 $GLOBALS['TL_LANG']['tl_mailkonten']['history_info'] = array('Grund', '');
-
-$GLOBALS['TL_LANG']['tl_mailkonten']['info_legend'] = 'Informationen';
-$GLOBALS['TL_LANG']['tl_mailkonten']['anmerkungen'] = array('Anmerkungen', 'Anmerkungen');
 
 $GLOBALS['TL_LANG']['tl_mailkonten']['publish_legend'] = 'Aktivierung';
 $GLOBALS['TL_LANG']['tl_mailkonten']['published'] = array('Aktiv', 'E-Mail-Konto aktiv (nicht gelöscht)');

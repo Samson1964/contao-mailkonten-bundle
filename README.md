@@ -5,7 +5,7 @@ Mailinglisten und hält fest, wer für welches Konto zuständig ist. Für Konten
 Zugangsdaten prüft die Erweiterung zusätzlich regelmäßig den Füllstand des
 Postfachs.
 
-Läuft unter **Contao 4.13 und Contao 5** mit **PHP 7.4 bis 8.3**.
+Läuft unter **Contao 4.13 und Contao 5** mit **PHP 7.4 bis 8.4**.
 
 ## Installation
 
@@ -36,8 +36,9 @@ sich vier Bereiche einschalten, die dann eigene Felder aufklappen:
 | Alias | Alias-Adressen mit Einrichtungsdatum und Grund |
 | Mailingliste | Adresse der Listenverwaltung, deren Passwort und die eingetragenen Adressen |
 
-Dazu kommen eine Bearbeitungsgeschichte, ein freies Anmerkungsfeld und die
-beiden Schalter **Aktiv** und **Gelöscht**.
+Dazu kommen eine Bearbeitungsgeschichte, die mehrzeilige Info als freies
+Notizfeld und die beiden Schalter **Aktiv** und **Gelöscht**. Ist **Gelöscht**
+gesetzt, erscheint der Datensatz in der Liste durchgestrichen und rot.
 
 ### Export der Liste
 

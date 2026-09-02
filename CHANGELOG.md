@@ -1,5 +1,20 @@
 # Mailkonten Changelog
 
+## Version 2.1.0 (2026-09-02)
+
+* Change: Feld „Anmerkungen“ aufgelöst und in „Info“ überführt, die jetzt
+  mehrzeilig ist – ein Konto hatte bisher zwei ähnliche Freitextfelder
+  (`Migration\AnmerkungenMigration` übernimmt bestehende Anmerkungen beim
+  nächsten `contao:migrate`, bevor die Spalte entfernt wird)
+* Add: Gelöschte Konten erscheinen in der Liste durchgestrichen und rot statt
+  nur am kleinen Häkchen in der Spalte „Gelöscht“ erkennbar zu sein
+* Change: Spalte „Alias“ der Liste zeigt ein Symbol statt eines nackten
+  Bindestrichs, wenn kein Alias gepflegt ist
+* Change: PHP-8.4-Kompatibilität geprüft (keine Deprecation-Meldungen aus dem
+  eigenen Code) und in `README.md`/`composer.json` bestätigt
+* Add: `TODO.md` steht jetzt in der `.gitignore` (private Arbeitsnotiz, wird
+  nicht versioniert)
+
 ## Version 2.0.0 (2026-08-02)
 
 Portierung auf Contao 4.13/5 und PHP 8.3. Die Erweiterung setzt jetzt

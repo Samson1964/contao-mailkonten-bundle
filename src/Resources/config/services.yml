@@ -10,3 +10,12 @@ services:
         public: true
         tags:
             - { name: contao.cronjob, interval: hourly }
+
+    # Führt beim nächsten contao:migrate das aufgelöste Feld "Anmerkungen" in
+    # die Info über, bevor der Schema-Abgleich die Spalte entfernt.
+    Schachbulle\ContaoMailkontenBundle\Migration\AnmerkungenMigration:
+        public: true
+        arguments:
+            - '@database_connection'
+        tags:
+            - { name: contao.migration }

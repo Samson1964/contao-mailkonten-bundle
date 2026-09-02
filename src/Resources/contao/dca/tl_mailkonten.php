@@ -10,6 +10,7 @@
 use Contao\Backend;
 use Contao\DataContainer;
 use Contao\DC_Table;
+use Contao\Image;
 use Contao\StringUtil;
 
 /**
@@ -128,7 +129,10 @@ $GLOBALS['TL_DCA']['tl_mailkonten'] = array
 	'palettes' => array
 	(
 		'__selector__'                => array('pop3', 'forward', 'alias', 'mailinglist'),
-		'default'                     => '{mail_legend},email,info;{pop3_legend},pop3;{forward_legend},forward;{alias_legend:hide},alias;{responder_legend:hide},auto_responder;{mailingliste_legend},mailinglist;{history_legend:hide},history;{info_legend:hide},anmerkungen;{publish_legend},published,deleted'
+		// Das frühere zweite Feld "anmerkungen" ist in "info" aufgegangen (siehe
+		// Migration\AnmerkungenMigration) - ein Konto hat seither nur noch eine
+		// einzige, jetzt mehrzeilige Info
+		'default'                     => '{mail_legend},email,info;{pop3_legend},pop3;{forward_legend},forward;{alias_legend:hide},alias;{responder_legend:hide},auto_responder;{mailingliste_legend},mailinglist;{history_legend:hide},history;{publish_legend},published,deleted'
 	),
 
 	// Unterpaletten
@@ -171,20 +175,25 @@ $GLOBALS['TL_DCA']['tl_mailkonten'] = array
 				'tl_class'            => 'w50'
 			)
 		),
+		// Seit 2.1.0 mehrzeilig: Das frühere zweite Feld "Anmerkungen" ist hier
+		// aufgegangen (siehe Migration\AnmerkungenMigration), damit ein Konto
+		// nur noch eine einzige Stelle für Freitext hat statt zwei ähnlicher
 		'info' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_mailkonten']['info'],
-			'inputType'               => 'text',
+			'inputType'               => 'textarea',
 			'exclude'                 => true,
 			'search'                  => true,
 			'sorting'                 => true,
 			'filter'                  => true,
-			'sql'                     => "varchar(255) NOT NULL default ''",
+			'sql'                     => "text NULL",
 			'eval'                    => array
 			(
 				'mandatory'           => false,
-				'maxlength'           => 255,
-				'tl_class'            => 'w50'
+				'tl_class'            => 'long clr',
+				'cols'                => 80,
+				'rows'                => 4,
+				'style'               => 'height: 70px'
 			)
 		),
 		'pop3' => array
@@ -777,23 +786,6 @@ $GLOBALS['TL_DCA']['tl_mailkonten'] = array
 			),
 			'sql'                   => "blob NULL"
 		),
-		'anmerkungen' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_mailkonten']['anmerkungen'],
-			'inputType'               => 'textarea',
-			'exclude'                 => true,
-			'search'                  => true,
-			'sorting'                 => false,
-			'filter'                  => false,
-			'eval'                    => array
-			(
-				'tl_class'            => 'long',
-				'cols'                => 80,
-				'rows'                => 5,
-				'style'               => 'height: 80px'
-			),
-			'sql'                     => "text NULL"
-		),
 		'auto_responder' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_mailkonten']['auto_responder'],
@@ -908,8 +900,23 @@ class tl_mailkonten extends Backend
 		// Weiterleitungen: Zieladressen
 		$args[2] = !empty($row['forward']) ? self::adressliste($row['forwarder'], 'forwarder_email') : '-';
 
-		// Aliasse: Alias-Adressen
-		$args[3] = !empty($row['alias']) ? self::adressliste($row['aliase'], 'aliase_email') : '-';
+		// Aliasse: Symbol statt nacktem Ja/Nein, davor die Alias-Adressen, wenn
+		// welche gepflegt sind. Dieselben Symbole verwendet auch die
+		// Toggle-Operation der Liste, damit die Bedeutung vertraut ist
+		$args[3] = !empty($row['alias'])
+			? Image::getHtml('visible.svg', '') . ' ' . self::adressliste($row['aliase'], 'aliase_email')
+			: Image::getHtml('invisible.svg', '');
+
+		// Gelöschte Konten deutlich kennzeichnen: durchgestrichen und rot,
+		// damit sie beim Überfliegen der Liste sofort auffallen und nicht nur
+		// am kleinen Häkchen in der Spalte „Gelöscht“ zu erkennen sind
+		if (!empty($row['deleted']))
+		{
+			foreach ($args as $i => $wert)
+			{
+				$args[$i] = '<span style="color:#c00;text-decoration:line-through;">' . $wert . '</span>';
+			}
+		}
 
 		return $args;
 	}
