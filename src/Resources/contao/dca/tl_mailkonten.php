@@ -12,6 +12,7 @@ use Contao\DataContainer;
 use Contao\DC_Table;
 use Contao\Image;
 use Contao\StringUtil;
+use Schachbulle\ContaoMailkontenBundle\Classes\Kopiervorlage;
 
 /**
  * Tabelle tl_mailkonten
@@ -132,13 +133,13 @@ $GLOBALS['TL_DCA']['tl_mailkonten'] = array
 		// Das frühere zweite Feld "anmerkungen" ist in "info" aufgegangen (siehe
 		// Migration\AnmerkungenMigration) - ein Konto hat seither nur noch eine
 		// einzige, jetzt mehrzeilige Info
-		'default'                     => '{mail_legend},email,info;{pop3_legend},pop3;{forward_legend},forward;{alias_legend:hide},alias;{responder_legend:hide},auto_responder;{mailingliste_legend},mailinglist;{history_legend:hide},history;{publish_legend},published,deleted'
+		'default'                     => '{mail_legend},email,info;{pop3_legend},pop3;{forward_legend},forward;{alias_legend:hide},alias;{responder_legend:hide},auto_responder;{mailingliste_legend},mailinglist;{history_legend:hide},history;{kopie_legend:hide},kopiervorlage;{publish_legend},published,deleted'
 	),
 
 	// Unterpaletten
 	'subpalettes' => array
 	(
-		'pop3'                        => 'inhaber,passwort,mailbox_groesse,auslastung,spam,leerung,smtp_server,smtp_port,pop3_server,pop3_port,imap_server,imap_port,backup,checkup',
+		'pop3'                        => 'inhaber,passwort,mailbox_groesse,auslastung,spam,leerung,serverAbruf,smtp_server,smtp_port,pop3_server,pop3_port,imap_server,imap_port,backup,checkup',
 		'forward'                     => 'forwarder,weiterleitungen',
 		'alias'                       => 'aliase,alias_adressen',
 		'mailinglist'                 => 'url,urlLinked,mlPasswort,mailingliste',
@@ -298,6 +299,12 @@ $GLOBALS['TL_DCA']['tl_mailkonten'] = array
 				'isBoolean'           => true
 			),
 			'sql'                     => "char(1) NOT NULL default ''"
+		),
+		// Knopf „Server abrufen“: trägt Server und Ports aus der Autokonfiguration
+		// des Mailanbieters ein (siehe Classes\Serversuche)
+		'serverAbruf' => array
+		(
+			'input_field_callback'    => array('tl_mailkonten', 'getServerKnopf'),
 		),
 		'smtp_server' => array
 		(
@@ -786,6 +793,11 @@ $GLOBALS['TL_DCA']['tl_mailkonten'] = array
 			),
 			'sql'                   => "blob NULL"
 		),
+		// Fertiger Text mit den Zugangsdaten zum Kopieren (siehe Classes\Kopiervorlage)
+		'kopiervorlage' => array
+		(
+			'input_field_callback'    => array('tl_mailkonten', 'getKopiervorlage'),
+		),
 		'auto_responder' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_mailkonten']['auto_responder'],
@@ -954,6 +966,64 @@ class tl_mailkonten extends Backend
 		}
 
 		return $adressen ? implode('<br>', $adressen) : '-';
+	}
+
+	/**
+	 * Gibt den Knopf „Server abrufen“ aus.
+	 *
+	 * Der Knopf trägt nur Kennungen für das Skript (mailkonten.js), das bei
+	 * einem Klick die Adresse aus dem Feld „E-Mail“ liest, die Serversuche
+	 * aufruft und die Felder für Server und Ports füllt. Er arbeitet mit dem,
+	 * was gerade im Feld steht — die Adresse muss dafür nicht gespeichert sein.
+	 *
+	 * @param DataContainer $dc Data Container des Formulars; wird nicht ausgewertet
+	 *
+	 * @return string HTML des Feldes
+	 */
+	public function getServerKnopf(DataContainer $dc)
+	{
+		return '<div class="widget clr">
+			<button type="button" class="tl_submit" data-mailkonten="server-abrufen">' . ($GLOBALS['TL_LANG']['tl_mailkonten']['serverAbruf'][0] ?? '') . '</button>
+			<span data-mailkonten="meldung" role="status" style="margin-left:10px;"></span>
+			<p class="tl_help tl_tip" style="margin-top:6px;">' . ($GLOBALS['TL_LANG']['tl_mailkonten']['serverAbruf'][1] ?? '') . '</p>
+			</div>';
+	}
+
+	/**
+	 * Gibt die Kopiervorlage mit den Zugangsdaten aus.
+	 *
+	 * Der Text steht in einem schreibgeschützten Feld und wird per Knopf in die
+	 * Zwischenablage gelegt. Er entspricht dem gespeicherten Datensatz; wer
+	 * gerade etwas geändert hat, muss erst speichern.
+	 *
+	 * @param DataContainer $dc Data Container des Formulars; liefert über
+	 *                          activeRecord den bearbeiteten Datensatz
+	 *
+	 * @return string HTML des Feldes. Ohne Datensatz (neues Konto) ein leeres Platzhalter-Feld
+	 */
+	public function getKopiervorlage(DataContainer $dc)
+	{
+		$datensatz = $dc->activeRecord ?? null;
+
+		if (\is_object($datensatz) && method_exists($datensatz, 'row'))
+		{
+			$datensatz = $datensatz->row();
+		}
+
+		$text = Kopiervorlage::text(\is_array($datensatz) ? $datensatz : (array) $datensatz);
+
+		if ('' === $text)
+		{
+			return '<div class="widget clr"></div>';
+		}
+
+		return '<div class="widget clr long" data-mailkonten="kopiervorlage">
+			<h3><label for="ctrl_kopiervorlage">' . ($GLOBALS['TL_LANG']['tl_mailkonten']['kopiervorlage'][0] ?? '') . '</label></h3>
+			<textarea id="ctrl_kopiervorlage" class="tl_textarea" readonly rows="' . (substr_count($text, "\n") + 2) . '" cols="80" style="height:auto;" data-mailkonten="text">' . StringUtil::specialchars($text) . '</textarea>
+			<p><button type="button" class="tl_submit" data-mailkonten="kopieren">' . ($GLOBALS['TL_LANG']['tl_mailkonten']['kopieren'][0] ?? '') . '</button>
+			<span data-mailkonten="meldung" role="status" style="margin-left:10px;"></span></p>
+			<p class="tl_help tl_tip">' . ($GLOBALS['TL_LANG']['tl_mailkonten']['kopiervorlage'][1] ?? '') . '</p>
+			</div>';
 	}
 
 	/**

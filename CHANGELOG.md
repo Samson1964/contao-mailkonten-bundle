@@ -1,5 +1,20 @@
 # Mailkonten Changelog
 
+## Version 2.2.0 (2026-11-17)
+
+* Add: Knopf „Server abrufen“ in der Unterpalette POP3/IMAP – fragt Servernamen
+  und Ports über die Autokonfiguration des Mailanbieters ab (Format config-v1.1:
+  autoconfig.<domain>, /.well-known/ der Domain, Thunderbird-ISP-Datenbank, auch
+  für die Domain des Mailservers laut MX) und trägt sie ins Formular ein.
+  Gesendet wird nur die Domain; Abfragen interner Adressen sind gesperrt
+  (`NoPrivateNetworkHttpClient`)
+* Add: Kopiervorlage im Formular mit Benutzername, Passwort, Servern,
+  Weiterleitungen, Aliassen und Auto-Responder, per Knopf in die Zwischenablage
+* Add: `symfony/http-client` als ausdrückliche Abhängigkeit (kam bisher nur über Contao mit)
+* Fix: `Migration\AnmerkungenMigration` nutzte `readonly` und Konstruktor-Promotion
+  (PHP 8.1), obwohl das Bundle PHP 7.4 verspricht
+* Add: 18 weitere Unit-Tests (Serversuche, Kopiervorlage)
+
 ## Version 2.1.0 (2026-09-02)
 
 * Change: Feld „Anmerkungen“ aufgelöst und in „Info“ überführt, die jetzt

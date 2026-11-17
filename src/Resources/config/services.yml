@@ -11,6 +11,16 @@ services:
         tags:
             - { name: contao.cronjob, interval: hourly }
 
+    # Serversuche hinter dem Knopf "Server abrufen" im Formular. Die Fabrik
+    # setzt den HTTP-Client hinter einen Schutz vor Abfragen interner Adressen.
+    # Öffentlich, weil Classes\Serverabruf sie über den Container holt (der
+    # Modulschlüssel "server" wird von Contao ohne Konstruktorargumente erzeugt).
+    Schachbulle\ContaoMailkontenBundle\Classes\Serversuche:
+        public: true
+        factory: ['Schachbulle\ContaoMailkontenBundle\Classes\Serversuche', 'mitSchutz']
+        arguments:
+            - '@http_client'
+
     # Führt beim nächsten contao:migrate das aufgelöste Feld "Anmerkungen" in
     # die Info über, bevor der Schema-Abgleich die Spalte entfernt.
     Schachbulle\ContaoMailkontenBundle\Migration\AnmerkungenMigration:

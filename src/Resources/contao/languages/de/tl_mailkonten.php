@@ -42,6 +42,7 @@ $GLOBALS['TL_LANG']['tl_mailkonten']['auslastung'] = array('Auslastung', 'Auslas
 $GLOBALS['TL_LANG']['tl_mailkonten']['passwort'] = array('Passwort', 'Passwort des Postfaches. Wird für Checkup und Ping-Mail benötigt.');
 $GLOBALS['TL_LANG']['tl_mailkonten']['pop3_server'] = array('POP3-Server', 'POP3-Server');
 $GLOBALS['TL_LANG']['tl_mailkonten']['pop3_port'] = array('Port für SSL-Abruf bei POP3-Nutzung', 'Port für SSL-Abruf bei POP3-Nutzung');
+$GLOBALS['TL_LANG']['tl_mailkonten']['serverAbruf'] = array('Server abrufen', 'Fragt Servernamen und Ports beim Mailanbieter der oben eingetragenen Adresse ab und trägt sie in die Felder darunter ein. Gesendet wird nur die Domain, nicht der Teil vor dem @-Zeichen. Eingetragene Werte werden überschrieben; gespeichert wird erst mit „Speichern“.');
 $GLOBALS['TL_LANG']['tl_mailkonten']['smtp_server'] = array('SMTP-Server', 'Servername für SSL-Versand');
 $GLOBALS['TL_LANG']['tl_mailkonten']['smtp_port'] = array('Port für SSL-Versand', 'Port für SSL-Versand. Bei 465 wird sofort verschlüsselt, sonst über STARTTLS.');
 $GLOBALS['TL_LANG']['tl_mailkonten']['imap_server'] = array('IMAP-Server', 'IMAP-Server');
@@ -84,6 +85,10 @@ $GLOBALS['TL_LANG']['tl_mailkonten']['history_legend'] = 'Bearbeitungen';
 $GLOBALS['TL_LANG']['tl_mailkonten']['history'] = array('Bearbeitungsgeschichte', '');
 $GLOBALS['TL_LANG']['tl_mailkonten']['history_date'] = array('Bearbeitungsdatum', '');
 $GLOBALS['TL_LANG']['tl_mailkonten']['history_info'] = array('Grund', '');
+
+$GLOBALS['TL_LANG']['tl_mailkonten']['kopie_legend'] = 'Kopiervorlage';
+$GLOBALS['TL_LANG']['tl_mailkonten']['kopiervorlage'] = array('Zugangsdaten', 'Fertiger Text mit Benutzername, Passwort, Servern, Weiterleitungen, Aliassen und Auto-Responder zum Weitergeben. Er zeigt den zuletzt gespeicherten Stand.');
+$GLOBALS['TL_LANG']['tl_mailkonten']['kopieren'] = array('In die Zwischenablage kopieren', '');
 
 $GLOBALS['TL_LANG']['tl_mailkonten']['publish_legend'] = 'Aktivierung';
 $GLOBALS['TL_LANG']['tl_mailkonten']['published'] = array('Aktiv', 'E-Mail-Konto aktiv (nicht gelöscht)');

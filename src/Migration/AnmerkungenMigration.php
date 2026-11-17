@@ -28,12 +28,23 @@ use Doctrine\DBAL\Connection;
 class AnmerkungenMigration extends AbstractMigration
 {
 	/**
+	 * Verbindung zur Contao-Datenbank.
+	 *
+	 * Ohne `readonly` und ohne Konstruktor-Promotion geschrieben: Beides gibt es
+	 * erst ab PHP 8.0 bzw. 8.1, das Bundle verspricht aber PHP 7.4.
+	 *
+	 * @var Connection
+	 */
+	private $connection;
+
+	/**
 	 * Konstruktor mit Dependency Injection.
 	 *
 	 * @param Connection $connection Die Doctrine-Verbindung zur Contao-Datenbank
 	 */
-	public function __construct(private readonly Connection $connection)
+	public function __construct(Connection $connection)
 	{
+		$this->connection = $connection;
 	}
 
 	/**

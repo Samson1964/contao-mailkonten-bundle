@@ -40,6 +40,28 @@ Dazu kommen eine Bearbeitungsgeschichte, die mehrzeilige Info als freies
 Notizfeld und die beiden Schalter **Aktiv** und **Gelöscht**. Ist **Gelöscht**
 gesetzt, erscheint der Datensatz in der Liste durchgestrichen und rot.
 
+### Server abrufen
+
+In der Unterpalette **POP3/IMAP** trägt der Knopf **Server abrufen** Servernamen
+und Ports für SMTP, POP3 und IMAP ein. Gefragt wird, wie es auch Thunderbird
+tut, nach der Autokonfiguration des Mailanbieters: zuerst bei
+`autoconfig.<domain>`, dann unter `/.well-known/autoconfig/` der Domain, zuletzt
+in der öffentlichen ISP-Datenbank von Thunderbird — dort auch mit der Domain
+des Mailservers (MX), weil eigene Domains bei großen Hostern selbst nicht
+verzeichnet sind. Je Dienst wird die SSL-Variante bevorzugt; gibt es nur
+STARTTLS, erscheint ein Hinweis, denn der Checkup spricht nur SSL.
+
+Übertragen wird nur die Domain, nie der Teil vor dem @-Zeichen. Die Werte
+landen im Formular und werden erst mit „Speichern“ übernommen. Findet keine
+Quelle etwas, bleiben die Felder unverändert.
+
+### Kopiervorlage
+
+Im Bereich **Kopiervorlage** steht ein fertiger Text mit Benutzername, Passwort,
+Servern und Ports (nur bei eingeschaltetem POP3/IMAP), Weiterleitungen,
+Alias-Adressen und Auto-Responder. Ein Knopf legt ihn in die Zwischenablage.
+Der Text zeigt den zuletzt gespeicherten Stand.
+
 ### Export der Liste
 
 Der Knopf **Export** über der Liste schreibt alle angezeigten Konten in eine
