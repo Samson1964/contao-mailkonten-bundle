@@ -87,21 +87,27 @@ Aufgelöst wird bis zur fünften Ebene. Berücksichtigt werden nur aktive Konten
 mit eingeschalteter Weiterleitung; Konten, die sich gegenseitig weiterleiten,
 brechen den Zweig ab, statt ihn endlos zu wiederholen.
 
-## Checkup und Ping-Mail
+## Checkup
 
 Ist bei einem Konto **Checkup** eingeschaltet und sind Zugangsdaten hinterlegt,
-kümmert sich ein Cronjob um zwei Dinge:
+meldet sich ein Cronjob **täglich** per IMAP am Postfach an, zählt die
+Nachrichten und liest die Speicherbelegung aus. Danach geht eine Übersicht aller
+geprüften Konten an den Administrator; Konten über 90 Prozent Belegung stehen
+darin rot.
 
-* **Täglich** meldet er sich per IMAP am Postfach an, zählt die Nachrichten und
-  liest die Speicherbelegung aus. Danach geht eine Übersicht aller geprüften
-  Konten an den Administrator; Konten über 90 Prozent Belegung stehen darin rot.
-* **Monatlich** verschickt er über den SMTP-Server des Kontos eine Ping-Mail an
-  das Konto selbst. Damit gilt das Konto beim Anbieter als genutzt und wird
-  nicht wegen Untätigkeit gelöscht.
+Die tägliche Anmeldung hält das Konto zugleich beim Anbieter aktiv.
+Domainfactory zum Beispiel löscht Postfächer, an denen sich 30 Tage lang niemand
+per POP3, IMAP, Webmail oder SMTP angemeldet hat
+([DF-FAQ](https://www.df.eu/de/support/df-faq/e-mail/migration/benachrichtigung-zu-inaktiven-postfaechern/)).
+Die frühere monatliche Ping-Mail ist deshalb seit 2.3.0 entfallen.
 
-Wann ein Konto zuletzt an der Reihe war, steht in den Feldern `checkup_date` und
-`ping_date`. Contao stößt den Cronjob stündlich an; die beiden Abstände sorgen
-dafür, dass daraus nicht vierundzwanzig Übersichten am Tag werden.
+**Voraussetzung ist die PHP-Erweiterung `imap`** auf dem Server. Fehlt sie, wird
+der Checkup übersprungen (Meldung im Systemprotokoll) — und die Konten werden
+dann auch nicht aktiv gehalten.
+
+Wann ein Konto zuletzt an der Reihe war, steht im Feld `checkup_date`. Contao
+stößt den Cronjob stündlich an; der Mindestabstand sorgt dafür, dass daraus
+nicht vierundzwanzig Übersichten am Tag werden.
 
 Ein nicht erreichbares Postfach bricht den Lauf nicht ab — der Grund landet im
 Systemprotokoll, und die übrigen Konten werden weiter geprüft.

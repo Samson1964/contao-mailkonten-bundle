@@ -18,9 +18,6 @@ use Contao\Email;
 use Contao\System;
 use Psr\Log\LogLevel;
 use Schachbulle\ContaoMailkontenBundle\Classes\IMAP;
-use Symfony\Component\Mailer\Mailer;
-use Symfony\Component\Mailer\Transport;
-use Symfony\Component\Mime\Email as MimeEmail;
 
 /**
  * Stündlicher Cronjob: prüft die E-Mail-Konten und hält sie in Betrieb.
@@ -33,18 +30,21 @@ use Symfony\Component\Mime\Email as MimeEmail;
  * aufrufbar, der die Adresse kannte. Ein Aufruf genügte, um sämtliche
  * Postfächer anzumelden und Mails zu verschicken.
  *
- * Der Cronjob erledigt zwei Dinge, jedes mit eigenem Abstand:
+ * Der Cronjob führt je Konto einmal täglich einen **Checkup** aus: Er meldet
+ * sich per IMAP am Postfach an und notiert Anzahl der E-Mails und
+ * Speicherbelegung. Danach geht eine Übersicht an den in den Einstellungen
+ * hinterlegten Administrator.
  *
- *   - **Checkup** (täglich je Konto): meldet sich am Postfach an und notiert
- *     Anzahl der E-Mails und Speicherbelegung. Danach geht eine Übersicht an
- *     den in den Einstellungen hinterlegten Administrator.
- *   - **Ping** (monatlich je Konto): verschickt eine Mail über den SMTP-Server
- *     des Kontos, damit der Anbieter das Konto nicht als ungenutzt löscht.
+ * Die tägliche Anmeldung hält das Konto zugleich beim Anbieter aktiv.
+ * Domainfactory etwa löscht Postfächer, an denen sich 30 Tage lang niemand
+ * per POP3, IMAP, Webmail oder SMTP angemeldet hat. Die frühere monatliche
+ * Ping-Mail über SMTP ist deshalb entfallen: Sie kam nur bei Konten mit
+ * Checkup zum Zug, war neben der täglichen IMAP-Anmeldung also überflüssig,
+ * und lag mit ihrem 30-Tage-Abstand genau auf der Löschgrenze.
  *
- * Die Abstände sind nötig, weil Contao den Cronjob stündlich anstößt. Ohne sie
- * bekäme der Administrator vierundzwanzig Übersichten am Tag und jedes Konto
- * ebenso viele Ping-Mails. Wann ein Konto zuletzt an der Reihe war, steht in
- * den Feldern checkup_date und ping_date.
+ * Der Mindestabstand ist nötig, weil Contao den Cronjob stündlich anstößt.
+ * Ohne ihn bekäme der Administrator vierundzwanzig Übersichten am Tag. Wann ein
+ * Konto zuletzt an der Reihe war, steht im Feld checkup_date.
  *
  * Eingeschaltet wird der Cronjob unter System -> Einstellungen im Bereich
  * „Mailkonten-Verwaltung“.
@@ -60,19 +60,11 @@ final class Kontenpruefung
 	private const INTERVALL_CHECKUP = 82800;
 
 	/**
-	 * Mindestabstand zwischen zwei Ping-Mails desselben Kontos in Sekunden.
-	 *
-	 * Anbieter löschen ungenutzte Postfächer üblicherweise nach mehreren
-	 * Monaten. Einmal im Monat ist damit reichlich Sicherheitsabstand.
-	 */
-	private const INTERVALL_PING = 2592000;
-
-	/**
 	 * Einstiegspunkt des Cronjobs.
 	 *
 	 * @return void Seiteneffekte: meldet sich an fremden Postfächern an,
-	 *              verschickt E-Mails, schreibt die Zeitstempel checkup_date
-	 *              und ping_date zurück und protokolliert Fehlschläge. Wirft
+	 *              verschickt die Übersicht an den Administrator, schreibt den
+	 *              Zeitstempel checkup_date zurück und protokolliert Fehlschläge. Wirft
 	 *              bewusst keine Ausnahme — ein nicht erreichbarer Mailserver
 	 *              darf die übrigen Cronjobs nicht mitreißen
 	 */
@@ -119,15 +111,6 @@ final class Kontenpruefung
 			Database::getInstance()
 				->prepare('UPDATE tl_mailkonten SET checkup_date=? WHERE id=?')
 				->execute($jetzt, $konto['id']);
-
-			if ($jetzt - (int) $konto['ping_date'] >= self::INTERVALL_PING)
-			{
-				$this->ping($konto);
-
-				Database::getInstance()
-					->prepare('UPDATE tl_mailkonten SET ping_date=? WHERE id=?')
-					->execute($jetzt, $konto['id']);
-			}
 		}
 
 		if ($ergebnisse)
@@ -294,62 +277,6 @@ final class Kontenpruefung
 		catch (\Throwable $e)
 		{
 			self::protokolliere('Mailkonten: Die Übersicht konnte nicht an '.$empfaenger.' verschickt werden: '.$e->getMessage());
-		}
-	}
-
-	/**
-	 * Verschickt eine Ping-Mail über den SMTP-Server des Kontos.
-	 *
-	 * Der Sinn liegt allein in der Anmeldung: Wer sich regelmäßig am
-	 * Postausgangsserver anmeldet, gilt dem Anbieter als aktiv. Absender und
-	 * Empfänger ist deshalb das Konto selbst — die Mail landet im eigenen
-	 * Posteingang und geht niemanden sonst etwas an. Früher standen hier fest
-	 * verdrahtet Adresse und Name des Schachbund-Webmasters, was in einer
-	 * wiederverwendbaren Erweiterung nichts zu suchen hat.
-	 *
-	 * Verschickt wird über Symfony Mailer, den Contao ohnehin mitbringt. Die
-	 * frühere Fassung setzte dafür PHPMailer voraus; die Abhängigkeit ist damit
-	 * entfallen.
-	 *
-	 * @param array $konto Datensatz aus tl_mailkonten
-	 *
-	 * @return void Fehler werden protokolliert und nicht geworfen
-	 */
-	private function ping(array $konto): void
-	{
-		$server = trim((string) $konto['smtp_server']);
-		$port = (int) $konto['smtp_port'];
-
-		if ('' === $server || $port <= 0)
-		{
-			return;
-		}
-
-		// Port 465 spricht von Beginn an verschlüsselt (smtps), alle anderen
-		// handeln die Verschlüsselung über STARTTLS aus
-		$dsn = sprintf(
-			'%s://%s:%s@%s:%d',
-			465 === $port ? 'smtps' : 'smtp',
-			rawurlencode((string) $konto['email']),
-			rawurlencode((string) $konto['passwort']),
-			$server,
-			$port
-		);
-
-		$nachricht = (new MimeEmail())
-			->from((string) $konto['email'])
-			->to((string) $konto['email'])
-			->subject('Ping-Mail')
-			->text('Automatische Ping-Mail der Mailkonten-Verwaltung, um eine Kontolöschung durch den Anbieter zu verhindern.');
-
-		try
-		{
-			$mailer = new Mailer(Transport::fromDsn($dsn));
-			$mailer->send($nachricht);
-		}
-		catch (\Throwable $e)
-		{
-			self::protokolliere('Mailkonten: Ping-Mail für '.$konto['email'].' fehlgeschlagen: '.$e->getMessage());
 		}
 	}
 

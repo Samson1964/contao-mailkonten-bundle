@@ -446,7 +446,9 @@ $GLOBALS['TL_DCA']['tl_mailkonten'] = array
 		(
 			'sql'                     => "int(10) unsigned NOT NULL default '0'",
 		),
-		// Zeitpunkt der letzten Ping-Mail, gesetzt von Cron\Kontenpruefung
+		// Zeitpunkt der letzten Ping-Mail. Die Ping-Mail ist seit 2.3.0
+		// entfallen; die Spalte bleibt stehen, damit contao:migrate sie nicht
+		// zum Löschen anbietet und ältere Fassungen weiterlaufen
 		'ping_date' => array
 		(
 			'sql'                     => "int(10) unsigned NOT NULL default '0'",

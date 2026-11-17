@@ -39,7 +39,7 @@ $GLOBALS['TL_LANG']['tl_mailkonten']['mailbox_groesse'] = array('Größe', 'Grö
 $GLOBALS['TL_LANG']['tl_mailkonten']['spam'] = array('Spam', 'Was wird mit Spam gemacht?');
 $GLOBALS['TL_LANG']['tl_mailkonten']['leerung'] = array('Leerung', 'Leerung vom Inhaber des Postfachs');
 $GLOBALS['TL_LANG']['tl_mailkonten']['auslastung'] = array('Auslastung', 'Auslastung des Postfachs');
-$GLOBALS['TL_LANG']['tl_mailkonten']['passwort'] = array('Passwort', 'Passwort des Postfaches. Wird für Checkup und Ping-Mail benötigt.');
+$GLOBALS['TL_LANG']['tl_mailkonten']['passwort'] = array('Passwort', 'Passwort des Postfaches. Wird für den Checkup benötigt.');
 $GLOBALS['TL_LANG']['tl_mailkonten']['pop3_server'] = array('POP3-Server', 'POP3-Server');
 $GLOBALS['TL_LANG']['tl_mailkonten']['pop3_port'] = array('Port für SSL-Abruf bei POP3-Nutzung', 'Port für SSL-Abruf bei POP3-Nutzung');
 $GLOBALS['TL_LANG']['tl_mailkonten']['serverAbruf'] = array('Server abrufen', 'Fragt Servernamen und Ports beim Mailanbieter der oben eingetragenen Adresse ab und trägt sie in die Felder darunter ein. Gesendet wird nur die Domain, nicht der Teil vor dem @-Zeichen. Eingetragene Werte werden überschrieben; gespeichert wird erst mit „Speichern“.');
@@ -48,7 +48,7 @@ $GLOBALS['TL_LANG']['tl_mailkonten']['smtp_port'] = array('Port für SSL-Versand
 $GLOBALS['TL_LANG']['tl_mailkonten']['imap_server'] = array('IMAP-Server', 'IMAP-Server');
 $GLOBALS['TL_LANG']['tl_mailkonten']['imap_port'] = array('Port für SSL-Abruf bei IMAP-Nutzung', 'Port für SSL-Abruf bei IMAP-Nutzung');
 $GLOBALS['TL_LANG']['tl_mailkonten']['backup'] = array('Backup', 'Backup erstellen. Diese Funktion ist noch nicht umgesetzt.');
-$GLOBALS['TL_LANG']['tl_mailkonten']['checkup'] = array('Checkup', 'Postfach täglich prüfen und monatlich eine Ping-Mail verschicken. Dazu muss der Cronjob unter System -> Einstellungen eingeschaltet sein.');
+$GLOBALS['TL_LANG']['tl_mailkonten']['checkup'] = array('Checkup', 'Postfach täglich per IMAP prüfen. Die Anmeldung hält das Konto zugleich beim Anbieter aktiv. Dazu muss der Cronjob unter System -> Einstellungen eingeschaltet sein.');
 
 $GLOBALS['TL_LANG']['tl_mailkonten']['forward_legend'] = 'Weiterleitungen';
 $GLOBALS['TL_LANG']['tl_mailkonten']['forward'] = array('Weiterleitung', 'Weiterleitung aktivieren');

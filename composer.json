@@ -20,8 +20,7 @@
         "php": "^7.4 || ^8.0",
         "contao/core-bundle": "^4.13 || ^5.0",
         "menatwork/contao-multicolumnwizard-bundle": "^3.4",
-        "symfony/http-client": "^5.4 || ^6.0 || ^7.0",
-        "symfony/mailer": "^5.4 || ^6.0 || ^7.0"
+        "symfony/http-client": "^5.4 || ^6.0 || ^7.0"
     },
     "conflict": {
         "contao/core": "*",

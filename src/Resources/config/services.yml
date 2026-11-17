@@ -1,6 +1,6 @@
 services:
-    # Stündliche Prüfung der E-Mail-Konten (Anzahl der E-Mails, Speicherbelegung,
-    # Ping-Mail gegen die automatische Kontolöschung).
+    # Stündliche Prüfung der E-Mail-Konten (Anzahl der E-Mails, Speicherbelegung;
+    # die tägliche IMAP-Anmeldung hält die Konten beim Anbieter zugleich aktiv).
     #
     # Hinweis: Hier stand früher ein _instanceof-Block für FrameworkAwareInterface
     # und ContainerAwareInterface. Keine Klasse dieser Erweiterung setzt die

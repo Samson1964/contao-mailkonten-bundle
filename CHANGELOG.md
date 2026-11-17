@@ -1,5 +1,14 @@
 # Mailkonten Changelog
 
+## Version 2.3.0 (2026-11-17)
+
+* Delete: Monatliche Ping-Mail entfernt. Sie wurde nur für Konten mit Checkup
+  verschickt, die sich ohnehin täglich per IMAP anmelden – und das zählt bei den
+  Anbietern bereits als Aktivität (Domainfactory: Anmeldung per POP3/IMAP/Webmail/SMTP
+  innerhalb von 30 Tagen). Der 30-Tage-Abstand der Ping-Mail lag zudem genau auf
+  dieser Löschgrenze. Die Spalte `ping_date` bleibt in der Datenbank erhalten
+* Delete: `symfony/mailer` aus den Abhängigkeiten entfernt (wurde nur für die Ping-Mail gebraucht)
+
 ## Version 2.2.0 (2026-11-17)
 
 * Add: Knopf „Server abrufen“ in der Unterpalette POP3/IMAP – fragt Servernamen
